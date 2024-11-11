@@ -95,38 +95,67 @@ namespace QLyRV
                         cmd.Parameters.AddWithValue("@MoTa", textBox4.Text.ToString());
                         cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
                         cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
-                        cmd.Parameters.AddWithValue("@NguoiSua", "vb");
+                        cmd.Parameters.AddWithValue("@NguoiSua", "VB");
                         cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
-                        cmd.Parameters.AddWithValue("@c", count + 1);
+                        cmd.Parameters.AddWithValue("@c", count);
 
                         cmd.ExecuteNonQuery();
                     }
                 }
                 else if(Camera.type == 1)
                 {
-                    string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "update GHINHANTHAM set MaVP = @c, Khoa = 1, ThoiGianRa = @tg, ThoiGianSua = @tg where CCCD_QuanNhan = @MaQN";
-                    using (SqlCommand cmd = new SqlCommand(add, conn))
+                    string one = "select CCCD_QuanNhan from GHINHANTHAM where CCCD_QuanNhan = @cccd and ThoiGianVao = @t";
+                    using (SqlCommand cmd = new SqlCommand(one, conn))                     
                     {
-                        cmd.Parameters.AddWithValue("@MoTa", textBox4.Text.ToString());
-                        cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
-                        cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
-                        cmd.Parameters.AddWithValue("@NguoiSua", "vb");
-                        cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
-                        cmd.Parameters.AddWithValue("@c", count + 1);
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read() && reader["CCCD_QuanNhan"] != "")
+                            {
+                                string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "insert into GHINHANTHAM values @cccdQuan, @htQuan, @cccdDan, @htDan, @tg, , @ghichu, 0, @NguoiSua, @tg, @c";
+                                using(SqlCommand cmd1 = new SqlCommand(add, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@MoTa", textBox4.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
+                                    cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@NguoiSua", "VB");
+                                    cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@c", count);
+                                    cmd.Parameters.AddWithValue("@cccdQuan", textBox1.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@htQuan", Camera.ht);
+                                    cmd.Parameters.AddWithValue("@cccdDan", Camera.cccdDan);
+                                    cmd.Parameters.AddWithValue("@htDan", Camera.htDan);
 
-                        cmd.ExecuteNonQuery();
-                    }
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                            else
+                            {
+                                string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "update GHINHANTHAM set MaVP = @c, Khoa = 1, ThoiGianRa = @tg, ThoiGianSua = @tg where CCCD_QuanNhan = @MaQN";
+                                using (SqlCommand cmd1 = new SqlCommand(add, conn))
+                                {
+                                    cmd.Parameters.AddWithValue("@MoTa", textBox4.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
+                                    cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@NguoiSua", "VB");
+                                    cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
+                                    cmd.Parameters.AddWithValue("@c", count);
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+                        }  
+                    }   
                 }
                 else
                 {
-                    string add = "insert into RANGOAI values @MaQN, , @TgianV, , 0, @ns, @TgianS, @vp, , ";
+                    string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "insert into RANGOAI values @MaQN, , @TgianV, , 0, @ns, @TgianS, @vp, , ";
                     using (SqlCommand cmd = new SqlCommand(add, conn))
                     {
                         cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
                         cmd.Parameters.AddWithValue("@TgianV", DateTime.Now.ToString());
-                        cmd.Parameters.AddWithValue("@ns", "vb");
+                        cmd.Parameters.AddWithValue("@ns", "VB");
                         cmd.Parameters.AddWithValue("@TgianS", DateTime.Now.ToString());
-                        cmd.Parameters.AddWithValue("@vp", count + 1);
+                        cmd.Parameters.AddWithValue("@vp", count);
 
                         cmd.ExecuteNonQuery();
                     }

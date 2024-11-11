@@ -28,7 +28,7 @@ namespace QLyRV
         public static int type;
         private String MaGT, MaDS;
 
-        public static string cccd, dv, ht, cv;
+        public static string cccd, dv, ht, cv, cccdDan, htDan;
 
         private String date = DateTime.Now.ToString("yyyy-MM-dd");
         public Camera()
@@ -138,6 +138,9 @@ namespace QLyRV
                         {
                             textBox1.Text = parts[4];
                             textBox5.Text = parts[0];
+
+                            cccdDan = textBox1.Text;
+                            htDan = textBox5.Text;
                         }
                     }
                 }
@@ -293,7 +296,7 @@ namespace QLyRV
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Error"); 
+                        MessageBox.Show("Không có dữ liệu"); 
                     }
                 }
             }
@@ -322,7 +325,7 @@ namespace QLyRV
         private void button4_Click(object sender, EventArgs e)
         {
             string ktra = "select rn.Khoa from RANGOAI rn, DANHSACH ds where ds.MaQN = @MaQN and ds.MaDS = rn.MaDS";
-            string addNhatKi = "insert into RANGOAI rn values @MaQN, @ThoiGianRa, @ThoiGianVao, , @Khoa, @NguoiSua, @ThoiGianSua, 0, @MaGT, @MaDS ";
+            string addNhatKi = "insert into RANGOAI rn values @MaQN, @ThoiGianRa, @ThoiGianVao, , @Khoa, @NguoiSua, @ThoiGianSua, , @MaGT, @MaDS ";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -341,7 +344,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
                                     add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@ThoiGianVao", "");
-                                    add.Parameters.AddWithValue("@Khoa", "0");
+                                    add.Parameters.AddWithValue("@Khoa", 0);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@MaGT", MaGT);
@@ -353,7 +356,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
                                     add.Parameters.AddWithValue("@ThoiGianRa", "");
                                     add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@Khoa", "1");
+                                    add.Parameters.AddWithValue("@Khoa", 1);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@MaGT", "");
@@ -365,7 +368,7 @@ namespace QLyRV
                             {
                                 if (type != 0)
                                 {
-                                    String ch = "update RANGOAI set Khoa = '0', ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
+                                    String ch = "update RANGOAI set Khoa = 0, ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
                                     SqlCommand change = new SqlCommand(ch, conn);
                                     change.Parameters.AddWithValue("@TGR", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     change.Parameters.AddWithValue("@TGS", DateTime.Now.ToString("yyyy - MMM - d :g"));
@@ -376,7 +379,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
                                     add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@ThoiGianVao", "");
-                                    add.Parameters.AddWithValue("@Khoa", "0");
+                                    add.Parameters.AddWithValue("@Khoa", 0);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@MaGT", MaGT);
@@ -388,7 +391,7 @@ namespace QLyRV
                             {
                                 if (type == 0)
                                 {
-                                    String ch = "update RANGOAI set Khoa = '0', ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
+                                    String ch = "update RANGOAI set Khoa = 0, ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
                                     SqlCommand change = new SqlCommand(ch, conn);
                                     change.Parameters.AddWithValue("@TGR", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     change.Parameters.AddWithValue("@TGS", DateTime.Now.ToString("yyyy - MMM - d :g"));
@@ -399,7 +402,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
                                     add.Parameters.AddWithValue("@ThoiGianRa", "");
                                     add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@Khoa", "1");
+                                    add.Parameters.AddWithValue("@Khoa", 1);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@MaGT", "");

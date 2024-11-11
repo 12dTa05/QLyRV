@@ -59,7 +59,7 @@ namespace QLyRV
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                 {
-                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 0);
+                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
                     // Fill the DataSet
                     adapter.Fill(data);
                 }
@@ -81,7 +81,7 @@ namespace QLyRV
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                 {
-                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 0);
+                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
                     adapter.SelectCommand.Parameters.AddWithValue("@MaDV", comboBox1.SelectedItem.ToString());
                     // Fill the DataSet
                     adapter.Fill(data);
