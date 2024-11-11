@@ -240,7 +240,7 @@ namespace QLyRV
                                             reader.Close();  // Close reader before executing the second query
                                             type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS, hv_gt.MaGT FROM DANHSACH ds JOIN HV_GIAYTO hv_gt ON ds.MADS = hv_gt.MADS JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND ds.MaQN = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS FROM DANHSACH ds JOIN HV_GIAYTO hv_gt ON ds.MADS = hv_gt.MADS JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND ds.MaQN = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
@@ -324,7 +324,7 @@ namespace QLyRV
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ktra = "select rn.Khoa from RANGOAI rn, DANHSACH ds where ds.MaQN = @MaQN and ds.MaDS = rn.MaDS";
+            string ktra = "select rn.Khoa from RANGOAI rn where rn.MaQN = '" + CCCD_TEXT.Text + "'";
             string addNhatKi = "insert into RANGOAI rn values @MaQN, @ThoiGianRa, @ThoiGianVao, , @Khoa, @NguoiSua, @ThoiGianSua, , @MaGT, @MaDS ";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))

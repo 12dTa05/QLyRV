@@ -27,7 +27,7 @@ namespace QLyRV
             //dataGridView1.DataSource = GetDuyet().Tables[0];
             if (Success.Type == 0)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -49,7 +49,7 @@ namespace QLyRV
             }
             else if(Success.Type == 2)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account +"'";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account +"' and DaXoa = 0";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {

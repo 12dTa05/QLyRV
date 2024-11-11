@@ -85,7 +85,7 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT tk.TDN, qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from TAIKHOAN tk, QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = @dv and tk.MaTaiKhoan = qn.MaQN and qn.TonTai = @tt and qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = @dv and dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -118,7 +118,7 @@ namespace QLyRV
         {
             DataSet data = new DataSet();
 
-            string query = " SELECT tk.TDN, qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from TAIKHOAN tk, QUANNHAN qn, CHUCVU cv, DONVI dv where tk.MaTaiKhoan = qn.MaQN and qn.TonTai = @tt and qn.MaDV = @dv and qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where qn.MaDV = @dv and qn.TonTai = @tt and  qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))

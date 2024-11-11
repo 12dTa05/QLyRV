@@ -67,7 +67,7 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string add = "insert into DANHSACH values @Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, , , , @NguoiSua, @ThoigianSua, @MaQN";
+            string add = "insert into DANHSACH values @Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, , , @NguoiSua, @ThoigianSua, @MaQN";
             string connectionString = conn_string;
             using(SqlConnection conn = new SqlConnection( connectionString ))
             {
