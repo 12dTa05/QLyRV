@@ -102,7 +102,7 @@ namespace QLyRV
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string add = "insert into TAIKHOAN values @TenDN, @MK, @MaNhom, @TonTai" + "\n insert into DONVI values @TenDN, , @MaTK, 0, @ct";
+            string add = " insert into DONVI values @TenDN, , @MaTK, 0, @ct" + "\n insert into TAIKHOAN values @TenDN, @MK, @MaNhom, @TonTai";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

@@ -130,7 +130,7 @@ namespace QLyRV
                             }
                             else
                             {
-                                string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "update GHINHANTHAM set MaVP = @c, Khoa = 1, ThoiGianRa = @tg, ThoiGianSua = @tg where CCCD_QuanNhan = @MaQN";
+                                string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "update GHINHANTHAM set MaVP = @c, Khoa = 1, ThoiGianRa = @tg, ThoiGianSua = @tg where CCCD_QuanNhan = @MaQN and CCCD_ThanNhan = @cccdDan";
                                 using (SqlCommand cmd1 = new SqlCommand(add, conn))
                                 {
                                     cmd.Parameters.AddWithValue("@MoTa", textBox4.Text.ToString());
@@ -139,6 +139,7 @@ namespace QLyRV
                                     cmd.Parameters.AddWithValue("@NguoiSua", "VB");
                                     cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
                                     cmd.Parameters.AddWithValue("@c", count);
+                                    cmd.Parameters.AddWithValue("@cccdDan", Camera.cccdDan);
 
                                     cmd.ExecuteNonQuery();
                                 }

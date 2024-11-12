@@ -149,7 +149,7 @@ namespace QLyRV
 
         private void button5_Click(object sender, EventArgs e)
         {
-            string ktra = "select Khoa from GHINHANTHAM  where CCCD_QuanNhan = @cccd";
+            string ktra = "select Khoa from GHINHANTHAM  where CCCD_QuanNhan = @cccd and ThoiGianVao = '" + DateTime.Now.ToString() + "'";
             
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -324,7 +324,7 @@ namespace QLyRV
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ktra = "select rn.Khoa from RANGOAI rn where rn.MaQN = '" + CCCD_TEXT.Text + "'";
+            string ktra = "select rn.Khoa from RANGOAI rn where rn.MaQN = '" + CCCD_TEXT.Text + "' and (ThoiGianRa = '" + DateTime.Now.ToString() + "' or ThoiGianVao = '" + DateTime.Now.ToString() + "')";
             string addNhatKi = "insert into RANGOAI rn values @MaQN, @ThoiGianRa, @ThoiGianVao, , @Khoa, @NguoiSua, @ThoiGianSua, , @MaGT, @MaDS ";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))

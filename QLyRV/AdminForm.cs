@@ -134,7 +134,7 @@ int nHeightEllipse // width of ellipse
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            //OpenChildForm(new ThongKe());
+            OpenChildForm(new ThongKe());
         }
 
         private void Button4_Click_1(object sender, EventArgs e)

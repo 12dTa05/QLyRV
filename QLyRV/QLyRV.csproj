@@ -354,6 +354,9 @@
     <EmbeddedResource Include="TaiKhoan.resx">
       <DependentUpon>TaiKhoan.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ThongKe.resx">
+      <DependentUpon>ThongKe.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UnSucess.resx">
       <DependentUpon>UnSucess.cs</DependentUpon>
     </EmbeddedResource>

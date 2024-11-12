@@ -133,15 +133,13 @@ namespace QLyRV
                         else
                         {
                             new UnSucess().Show();
-                            MessageBox.Show("Sai tên tài khoản hoặc mật khẩu");
+                            
                         }
                     }
                 }
                 else
                 {
                    new UnSucess().Show();
-
-                    MessageBox.Show("Sai tên tài khoản hoặc mật khẩu");
                 }
             }
             catch (Exception ex)

@@ -290,6 +290,7 @@
             this.Button5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.Button5.TextColor = System.Drawing.Color.White;
             this.Button5.UseVisualStyleBackColor = false;
+            this.Button5.Click += new System.EventHandler(this.Button5_Click);
             // 
             // panelMenu
             // 
