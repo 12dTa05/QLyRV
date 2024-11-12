@@ -240,7 +240,7 @@ namespace QLyRV
                                             reader.Close();  // Close reader before executing the second query
                                             type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS FROM DANHSACH ds JOIN HV_GIAYTO hv_gt ON ds.MADS = hv_gt.MADS JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND ds.MaQN = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND ds.MaQN = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
@@ -252,7 +252,7 @@ namespace QLyRV
                                                     {
                                                         donvi_text.Text = reader["TenDV"].ToString();
                                                         MaDS = reader["MaDS"].ToString();
-                                                        MaGT = reader["MaGT"].ToString();
+                                                        //MaGT = reader["MaGT"].ToString();
 
                                                         dv = donvi_text.Text;
                                                     }
@@ -347,7 +347,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@Khoa", 0);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", MaGT);
+                                    add.Parameters.AddWithValue("@MaGT", status_text.Text);
                                     add.Parameters.AddWithValue("@MaDS", MaDS);
 
                                 }
@@ -382,7 +382,7 @@ namespace QLyRV
                                     add.Parameters.AddWithValue("@Khoa", 0);
                                     add.Parameters.AddWithValue("@NguoiSua", "VB");
                                     add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", MaGT);
+                                    add.Parameters.AddWithValue("@MaGT", status_text);
                                     add.Parameters.AddWithValue("@MaDS", MaDS);
                                     add.ExecuteNonQuery();
                                 }

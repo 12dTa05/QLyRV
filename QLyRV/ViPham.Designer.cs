@@ -192,10 +192,11 @@
             // 
             // textBox6
             // 
+            this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox6.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox6.Location = new System.Drawing.Point(208, 18);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(162, 34);
+            this.textBox6.Size = new System.Drawing.Size(162, 27);
             this.textBox6.TabIndex = 73;
             // 
             // ViPham

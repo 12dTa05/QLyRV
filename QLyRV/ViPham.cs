@@ -109,7 +109,7 @@ namespace QLyRV
                     {
                         using (SqlDataReader reader = cmd.ExecuteReader())
                         {
-                            if (reader.Read() && reader["CCCD_QuanNhan"] != "")
+                            if (reader.Read() && reader.GetString(reader.GetOrdinal("CCCD_QuanNhan")).ToString() != "")
                             {
                                 string add = "insert into VIPHAM values @MoTa, , @tg, @ghichu, @NguoiSua, @MaQN \n" + "insert into GHINHANTHAM values @cccdQuan, @htQuan, @cccdDan, @htDan, @tg, , @ghichu, 0, @NguoiSua, @tg, @c";
                                 using(SqlCommand cmd1 = new SqlCommand(add, conn))

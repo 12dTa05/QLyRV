@@ -27,7 +27,7 @@ namespace QLyRV
             //dataGridView1.DataSource = GetDuyet().Tables[0];
             if (Success.Type == 0)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0 and Cap != 0";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -75,7 +75,18 @@ namespace QLyRV
                 
             }
 
-            comboBox1.SelectedIndex = 0;
+            var items = comboBox1.Items.Cast<string>().ToList();
+            // Sắp xếp các mục theo độ dài và sau đó theo thứ tự chữ cái
+            items = items.OrderBy(item => item.Length).ThenBy(item => item).ToList();
+            // Xóa các mục hiện tại trong ComboBox
+            comboBox1.Items.Clear();
+            // Thêm các mục đã sắp xếp vào lại ComboBox
+            foreach (var item in items)
+            {
+                comboBox1.Items.Add(item);
+            }
+
+            //comboBox1.SelectedIndex = 0;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

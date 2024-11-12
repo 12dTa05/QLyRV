@@ -119,7 +119,7 @@
             this.rjButton1.ForeColor = System.Drawing.Color.White;
             this.rjButton1.Image = ((System.Drawing.Image)(resources.GetObject("rjButton1.Image")));
             this.rjButton1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton1.Location = new System.Drawing.Point(-26, 0);
+            this.rjButton1.Location = new System.Drawing.Point(-35, 0);
             this.rjButton1.Margin = new System.Windows.Forms.Padding(0);
             this.rjButton1.Name = "rjButton1";
             this.rjButton1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
@@ -212,11 +212,11 @@
             this.Button4.ForeColor = System.Drawing.Color.White;
             this.Button4.Image = ((System.Drawing.Image)(resources.GetObject("Button4.Image")));
             this.Button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button4.Location = new System.Drawing.Point(-26, -15);
+            this.Button4.Location = new System.Drawing.Point(-27, 0);
             this.Button4.Margin = new System.Windows.Forms.Padding(0);
             this.Button4.Name = "Button4";
             this.Button4.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.Button4.Size = new System.Drawing.Size(258, 103);
+            this.Button4.Size = new System.Drawing.Size(258, 100);
             this.Button4.TabIndex = 2;
             this.Button4.Text = "       Nhật ký";
             this.Button4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -246,7 +246,7 @@
             this.Button3.ForeColor = System.Drawing.Color.White;
             this.Button3.Image = ((System.Drawing.Image)(resources.GetObject("Button3.Image")));
             this.Button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button3.Location = new System.Drawing.Point(-26, 0);
+            this.Button3.Location = new System.Drawing.Point(-27, 7);
             this.Button3.Margin = new System.Windows.Forms.Padding(0);
             this.Button3.Name = "Button3";
             this.Button3.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
@@ -280,7 +280,7 @@
             this.Button5.ForeColor = System.Drawing.Color.White;
             this.Button5.Image = ((System.Drawing.Image)(resources.GetObject("Button5.Image")));
             this.Button5.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.Button5.Location = new System.Drawing.Point(-26, 0);
+            this.Button5.Location = new System.Drawing.Point(-27, 0);
             this.Button5.Margin = new System.Windows.Forms.Padding(0);
             this.Button5.Name = "Button5";
             this.Button5.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
@@ -331,7 +331,7 @@
             this.rjButton3.ForeColor = System.Drawing.Color.White;
             this.rjButton3.Image = ((System.Drawing.Image)(resources.GetObject("rjButton3.Image")));
             this.rjButton3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.rjButton3.Location = new System.Drawing.Point(-26, 8);
+            this.rjButton3.Location = new System.Drawing.Point(-27, 8);
             this.rjButton3.Margin = new System.Windows.Forms.Padding(0);
             this.rjButton3.Name = "rjButton3";
             this.rjButton3.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);

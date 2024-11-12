@@ -22,7 +22,7 @@ namespace QLyRV
 
         private void TaiKhoan_Load(object sender, EventArgs e)
         {
-            string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0";
+            string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0 and Cap != 0";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -42,6 +42,17 @@ namespace QLyRV
                 }
             }
 
+            var items = comboBox1.Items.Cast<string>().ToList();
+            // Sắp xếp các mục theo độ dài và sau đó theo thứ tự chữ cái
+            items = items.OrderBy(item => item.Length).ThenBy(item => item).ToList();
+            // Xóa các mục hiện tại trong ComboBox
+            comboBox1.Items.Clear();
+            // Thêm các mục đã sắp xếp vào lại ComboBox
+            foreach (var item in items)
+            {
+                comboBox1.Items.Add(item);
+            }
+
             dataGridView1.DataSource = GetTK().Tables[0];
         }
 
@@ -50,7 +61,7 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT tk.TDN, dv.TenDV, tk.MaNhom, tk.Khoa from TAIKHOAN tk, DONVI dv where tk.MaTaiKhoan = dv.MaDV and qn.TonTai = @tt";
+            string query = " SELECT tk.TDN, dv.TenDV, tk.MaNhom from TAIKHOAN tk, DONVI dv where tk.TDN = dv.MaDV and tk.Khoa = @tt";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -59,7 +70,7 @@ namespace QLyRV
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                 {
-                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
+                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 0);
                     // Fill the DataSet
                     adapter.Fill(data);
                 }
@@ -72,7 +83,7 @@ namespace QLyRV
         {
             DataSet data = new DataSet();
 
-            string query = " SELECT dv.TenDV, tk.TenDN, tk.MaNhom, tk.Khoa from TAIKHOAN tk, DONVI dv where tk.MaTaiKhoan = @MaDV and qn.TonTai = @tt";
+            string query = " SELECT dv.TenDV, tk.TenDN, tk.MaNhom, tk.Khoa from TAIKHOAN tk, DONVI dv where tk.TDN = @MaDV and tk.Khoa = @tt";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -81,7 +92,7 @@ namespace QLyRV
 
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                 {
-                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
+                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 0);
                     adapter.SelectCommand.Parameters.AddWithValue("@MaDV", comboBox1.SelectedItem.ToString());
                     // Fill the DataSet
                     adapter.Fill(data);
@@ -118,7 +129,7 @@ namespace QLyRV
 
         private void button2_Click_1(object sender, EventArgs e)
         {
-            string add = "update TAIKHOAN set TonTai = @TonTai where TDN = @TDN" + "\n update DONVI set DaXoa = 1 where MaDV = @TDN";
+            string add = "update TAIKHOAN set Khoa = @TonTai where TDN = @TDN" + "\n update DONVI set DaXoa = 1 where MaDV = @TDN";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -129,7 +140,7 @@ namespace QLyRV
                     cmd.Parameters.AddWithValue("@TDN", textBox8.Text.ToString());
                     //cmd.Parameters.AddWithValue("@MK", textBox4.Text.ToString());
                     //cmd.Parameters.AddWithValue("@MN", textBox9.Text.ToString());
-                    cmd.Parameters.AddWithValue("@TonTai", 0);
+                    cmd.Parameters.AddWithValue("@TonTai", 1);
 
                     cmd.ExecuteNonQuery();
                 }
@@ -145,14 +156,15 @@ namespace QLyRV
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            tabControl1.SelectedTab = tabPage2;
             if (e.RowIndex >= 0 && e.ColumnIndex == 0)
             {
                 // Retrieve the clicked cell
                 //textBox12.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].ToString();
-                textBox8.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].ToString();
+                textBox8.Text = dataGridView1[e.ColumnIndex + 0, e.RowIndex].Value.ToString();
 
-                textBox9.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].ToString();
-                textBox13.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].ToString();
+                textBox4.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].Value.ToString();
+                textBox9.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
             }
         }
     }

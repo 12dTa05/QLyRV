@@ -23,13 +23,28 @@ namespace QLyRV
         public QuanNhan()
         {
             InitializeComponent();
+
+            
         }
 
         private void QuanNhan_Load(object sender, EventArgs e)
         {
-            if(Success.Type == 0)
+            if (Success.Type != 0 && Success.Type != 2)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI";
+                button2.Hide();
+                //button2.Hide();
+                tabControl1.TabPages.Remove(tabPage1);
+            }
+            if (Success.Type == 2)
+            {
+                tabControl1.TabPages.Remove(tabPage1);
+                label14.Hide();
+                textBox13.Hide();
+            }
+
+            if (Success.Type == 0)
+            {
+                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa != 1 and Cap != 0";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -51,7 +66,7 @@ namespace QLyRV
             }
             else if(Success.Type == 2)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account + "'";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account + "' and DaXoa != 1";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -76,7 +91,18 @@ namespace QLyRV
                 comboBox1.Items.Add(Account.account);
             }
 
-            comboBox1.SelectedIndex = 0;
+            var items = comboBox1.Items.Cast<string>().ToList();
+            // Sắp xếp các mục theo độ dài và sau đó theo thứ tự chữ cái
+            items = items.OrderBy(item => item.Length).ThenBy(item => item).ToList();
+            // Xóa các mục hiện tại trong ComboBox
+            comboBox1.Items.Clear();
+            // Thêm các mục đã sắp xếp vào lại ComboBox
+            foreach (var item in items)
+            {
+                comboBox1.Items.Add(item);
+            }
+
+            //comboBox1.SelectedIndex = 0;
             dataGridView1.DataSource = GetQN().Tables[0];
         }
 
@@ -85,19 +111,32 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = @dv and dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = @dv and dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
+            string query1 = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-
-                using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                if(comboBox1.SelectedItem != null)
                 {
-                    adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
-                    adapter.SelectCommand.Parameters.AddWithValue("@dv", comboBox1.SelectedItem.ToString());
-                    // Fill the DataSet
-                    adapter.Fill(data);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                    {
+                        adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
+                        adapter.SelectCommand.Parameters.AddWithValue("@dv", comboBox1.SelectedItem.ToString());
+                        // Fill the DataSet
+                        adapter.Fill(data);
+                    }
+                }
+                else
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query1, conn))
+                    {
+                        adapter.SelectCommand.Parameters.AddWithValue("@tt", 1);
+                        //adapter.SelectCommand.Parameters.AddWithValue("@dv", comboBox1.SelectedItem.ToString());
+                        // Fill the DataSet
+                        adapter.Fill(data);
+                    }
                 }
             }
 
@@ -118,7 +157,7 @@ namespace QLyRV
         {
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.TenCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where qn.MaDV = @dv and qn.TonTai = @tt and  qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where qn.MaDV = @dv and qn.TonTai = @tt and  qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -208,14 +247,15 @@ namespace QLyRV
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            tabControl1.SelectedTab = tabPage2;
             if (e.RowIndex >= 0 && e.ColumnIndex == 0)
             {
                 // Retrieve the clicked cell
-                textBox12.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].ToString();
-                textBox11.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].ToString();
-                textBox8.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].ToString();
-                textBox9.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].ToString();
-                textBox10.Text = dataGridView1[e.ColumnIndex + 6, e.RowIndex].ToString();
+                textBox12.Text = dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
+                textBox11.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].Value.ToString();
+                textBox8.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
+                textBox9.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].Value.ToString();
+                textBox10.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].Value.ToString();
             }
         }
     }

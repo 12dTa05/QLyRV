@@ -33,12 +33,16 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label4 = new System.Windows.Forms.Label();
@@ -50,10 +54,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -123,11 +123,29 @@
             this.tabPage1.Text = "  Thêm    ";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(14, 111);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(126, 26);
+            this.label6.TabIndex = 107;
+            this.label6.Text = "ĐV cấp trên";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox6.Location = new System.Drawing.Point(185, 103);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(305, 34);
+            this.textBox6.TabIndex = 106;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(21, 263);
+            this.label1.Location = new System.Drawing.Point(11, 263);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(105, 26);
             this.label1.TabIndex = 105;
@@ -145,7 +163,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(14, 185);
+            this.label2.Location = new System.Drawing.Point(13, 185);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(155, 26);
             this.label2.TabIndex = 103;
@@ -176,6 +194,24 @@
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(305, 34);
             this.textBox3.TabIndex = 100;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(14, 41);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(112, 26);
+            this.label5.TabIndex = 96;
+            this.label5.Text = "Tên đơn vị";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox5.Location = new System.Drawing.Point(185, 33);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(305, 34);
+            this.textBox5.TabIndex = 95;
             // 
             // button1
             // 
@@ -211,7 +247,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(25, 152);
+            this.label4.Location = new System.Drawing.Point(2, 152);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(105, 26);
             this.label4.TabIndex = 107;
@@ -229,7 +265,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(20, 312);
+            this.label14.Location = new System.Drawing.Point(2, 312);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(80, 26);
             this.label14.TabIndex = 105;
@@ -247,7 +283,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(25, 69);
+            this.label9.Location = new System.Drawing.Point(2, 69);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(155, 26);
             this.label9.TabIndex = 103;
@@ -265,7 +301,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(20, 234);
+            this.label10.Location = new System.Drawing.Point(2, 234);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(104, 26);
             this.label10.TabIndex = 101;
@@ -289,42 +325,6 @@
             this.button2.Text = "Xóa";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
-            // textBox5
-            // 
-            this.textBox5.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(185, 33);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(305, 34);
-            this.textBox5.TabIndex = 95;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(14, 41);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(112, 26);
-            this.label5.TabIndex = 96;
-            this.label5.Text = "Tên đơn vị";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(14, 111);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(126, 26);
-            this.label6.TabIndex = 107;
-            this.label6.Text = "ĐV cấp trên";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox6.Location = new System.Drawing.Point(185, 103);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(305, 34);
-            this.textBox6.TabIndex = 106;
             // 
             // TaiKhoan
             // 
