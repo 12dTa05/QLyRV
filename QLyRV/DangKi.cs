@@ -43,7 +43,7 @@ namespace QLyRV
             DateTime startDate = selectedDate;             // Start of selected date at 00:00
             DateTime endDate = selectedDate.AddDays(1);    // Start of the next day at 00:00
 
-            string query = " SELECT MaQN, HinhThucRN, LyDo, DiaDiem, ThoiGianRa, ThoiGianVao, NguoiSua, ThoiGianSua FROM DANHSACH WHERE ThoiGianRa > @StartDate AND ThoiGianRa < @EndDate";
+            string query = " SELECT MaQN, HinhThucRV, LyDo, DiaDiem, ThoiGianRa, ThoiGianVao, PheDuyet FROM DANHSACH WHERE ThoiGianRa > @StartDate AND ThoiGianRa < @EndDate";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -67,7 +67,7 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string add = "insert into DANHSACH values @Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, , , @NguoiSua, @ThoigianSua, @MaQN";
+            string add = "insert into DANHSACH values @Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, , , @MaQN";
             string connectionString = conn_string;
             using(SqlConnection conn = new SqlConnection( connectionString ))
             {
@@ -79,8 +79,6 @@ namespace QLyRV
                     cmd.Parameters.AddWithValue("@DiaDiem", textBox3.Text.ToString());
                     cmd.Parameters.AddWithValue("@TgianRa", dateTimePicker2.Value.ToString() + ' ' + textBox4.Text);
                     cmd.Parameters.AddWithValue("@TgianVao", dateTimePicker3.Value.ToString() + ' ' + textBox5.Text);
-                    cmd.Parameters.AddWithValue("@NguoiSua", Account.account);
-                    cmd.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString());
                     cmd.Parameters.AddWithValue("@MaQN", textBox1.Text);
 
                     cmd.ExecuteNonQuery();

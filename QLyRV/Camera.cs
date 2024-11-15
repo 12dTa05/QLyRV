@@ -28,9 +28,9 @@ namespace QLyRV
         public static int type;
         private String MaGT, MaDS;
 
-        public static string cccd, dv, ht, cv, cccdDan, htDan;
+        public static string maQN, cccd, dv, ht, cv, cccdDan, htDan;
 
-        private String date = DateTime.Now.ToString("yyyy-MM-dd");
+        private String date = DateTime.Now.ToString("yyyy-MM-dd :g");
         public Camera()
         {
             InitializeComponent();
@@ -114,7 +114,7 @@ namespace QLyRV
                             cccd = textBox4.Text;
                             ht = textBox3.Text;
 
-                            string quan = "select dv.TenDV from DONVI dv, QUANNHAN qn where qn.MaQN = @cccd and qn.MaDV = dv.MaDV";
+                            string quan = "select qn.MaQN, qn.HoTen, dv.TenDV from DONVI dv, QUANNHAN qn where qn.CCCD = @cccd and qn.MaDV = dv.MaDV";
                             string connectionString = conn_string;
 
                             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -128,7 +128,10 @@ namespace QLyRV
                                     {
                                         if (reader.Read())
                                         {
+                                            textBox4.Text = reader["MaQN"].ToString();
+                                            textBox3.Text = reader["HoTen"].ToString();
                                             textBox2.Text = reader["TenDV"].ToString();
+                                            maQN = textBox4.Text;
                                         }
                                     }
                                 }
@@ -147,9 +150,45 @@ namespace QLyRV
             }
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string qn = textBox6.Text;
+            string quan = "select qn.CCCD, qn.HoTen, dv.TenDV from DONVI dv, QUANNHAN qn where qn.MaQN = @qn and qn.MaDV = dv.MaDV";
+            string connectionString = conn_string;
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(quan, conn))
+                {
+                    cmd.Parameters.AddWithValue("@qn", qn);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if(tabControl1.SelectedIndex == 0)
+                            {
+                                textBox7.Text = textBox6.Text;
+                                textBox2.Text = reader["TenDV"].ToString();
+                                CCCD_TEXT.Text = reader["CCCD"].ToString();
+                                hoten_text.Text = reader["HoTen"].ToString();
+                            }
+                            else
+                            {
+                                //textBox2.Text = reader["TenDV"].ToString();
+                                textBox4.Text = reader["CCCD"].ToString();
+                                textBox3.Text = reader["HoTen"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void button5_Click(object sender, EventArgs e)
         {
-            string ktra = "select Khoa from GHINHANTHAM  where CCCD_QuanNhan = @cccd and ThoiGianVao = '" + DateTime.Now.ToString() + "'";
+            string ktra = "select Khoa from NHATKYTN  where CCCD_QuanNhan = @cccd and ThoiGianVao = '" + DateTime.Now.ToString() + "'";
             
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -164,14 +203,14 @@ namespace QLyRV
                             
                             if (reader["Khoa"].ToString() == "")
                             {
-                                string addNhatKi = "insert into GHINHANTHAM t values @MaQN, @TenQN, @cccdDan, @TenDan, @TgianV, @TgianR, , @Khoa, @NguoiSua, @TgianSua, ";
+                                string addNhatKi = "insert into NHATKYTN t values @MaQN, @cccdDan, @TenDan, @TgianV, @TgianR, , @Khoa";
                                 SqlCommand add = new SqlCommand(addNhatKi, conn);
                                 add.Parameters.AddWithValue("@MaQN", textBox4.Text);
-                                add.Parameters.AddWithValue("@TenQN", textBox3.Text);
+                                //add.Parameters.AddWithValue("@TenQN", textBox3.Text);
                                 add.Parameters.AddWithValue("@cccdDan", textBox1.Text);
                                 add.Parameters.AddWithValue("@TenDan", textBox5.Text);
-                                add.Parameters.AddWithValue("@NguoiSua", "VB");
-                                add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
+                                //add.Parameters.AddWithValue("@NguoiSua", "VB");
+                                //add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                 add.Parameters.AddWithValue("@Khoa", 0);
                                 add.Parameters.AddWithValue("@TgianV", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                 add.Parameters.AddWithValue("@TgianR", "");
@@ -179,7 +218,7 @@ namespace QLyRV
                             }
                             else
                             {
-                                string addNhatKi = "update GHINHANTHAM set ThoiGianRa = @TgianR, Khoa = 1, ThoiGianSua = @TgianR where CCCD_QuanNhan = @qn and CCCD_ThanNhan = @tn";
+                                string addNhatKi = "update NHATKYTN set ThoiGianRa = @TgianR, Khoa = 1, ThoiGianSua = @TgianR where MaQN = @qn and CCCD_ThanNhan = @tn";
                                 SqlCommand add = new SqlCommand(addNhatKi, conn);
                                 add.Parameters.AddWithValue("@qn", textBox4.Text);
                                 add.Parameters.AddWithValue("@tn", textBox1.Text);
@@ -215,7 +254,7 @@ namespace QLyRV
                     cccd = CCCD_TEXT.Text;
                     ht = hoten_text.Text;
 
-                    string chucvuQuery = "SELECT cv.ChucVu FROM CHUCVU cv JOIN QUANNHAN qn ON cv.MaCV = qn.MaCV WHERE qn.MaQN = @MaQN";
+                    string chucvuQuery = "SELECT cv.ChucVu FROM CHUCVU cv JOIN QUANNHAN qn ON cv.MaCV = qn.MaCV WHERE qn.CCCD = @MaQN";
                     string connectionString = conn_string;
 
                     try
@@ -240,7 +279,7 @@ namespace QLyRV
                                             reader.Close();  // Close reader before executing the second query
                                             type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND ds.MaQN = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS, qn.MaQN FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaDV = qn.MaDV WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
@@ -248,10 +287,11 @@ namespace QLyRV
 
                                                 using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
                                                 {
-                                                    if (dvReader.Read())
+                                                    if (dvReader.Read() && dvReader["MaDS"] != null)
                                                     {
-                                                        donvi_text.Text = reader["TenDV"].ToString();
-                                                        MaDS = reader["MaDS"].ToString();
+                                                        textBox7.Text = dvReader["MaQN"].ToString();
+                                                        donvi_text.Text = dvReader["TenDV"].ToString();
+                                                        MaDS = dvReader["MaDS"].ToString();
                                                         //MaGT = reader["MaGT"].ToString();
 
                                                         dv = donvi_text.Text;
@@ -266,9 +306,9 @@ namespace QLyRV
                                         else
                                         {
                                             reader.Close();  // Close reader before executing the second query
-                                            type = 0;
+                                            //type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV FROM QUANNHAN qn JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE ds.MaQN = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, qn.MaQN FROM QUANNHAN qn JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE qn.CCCD = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
@@ -277,7 +317,8 @@ namespace QLyRV
                                                 {
                                                     if (dvReader.Read())
                                                     {
-                                                        donvi_text.Text = reader["TenDV"].ToString();
+                                                        donvi_text.Text = dvReader["TenDV"].ToString();
+                                                        textBox7.Text = dvReader["MaQN"].ToString();
 
                                                         dv = donvi_text.Text;
                                                     }
@@ -313,10 +354,10 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(tabControl1.SelectedIndex == 1)
-            {
-                type = 1;
-            }
+            //if(tabControl1.SelectedIndex == 1)
+            //{
+            //    type = 1;
+            //}
             AdminForm af = new AdminForm(1);
             af.Show();
             af.OpenChildForm(new ViPham());    
@@ -324,8 +365,8 @@ namespace QLyRV
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ktra = "select rn.Khoa from RANGOAI rn where rn.MaQN = '" + CCCD_TEXT.Text + "' and (ThoiGianRa = '" + DateTime.Now.ToString() + "' or ThoiGianVao = '" + DateTime.Now.ToString() + "')";
-            string addNhatKi = "insert into RANGOAI rn values @MaQN, @ThoiGianRa, @ThoiGianVao, , @Khoa, @NguoiSua, @ThoiGianSua, , @MaGT, @MaDS ";
+            string ktra = "select rn.Khoa, ds.STT from NHATKIQN, DANHSACH ds rn where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
+            string addNhatKi = "insert into NHATKIQN rn values @Khoa, @STT_DS, @ThoiGianRa, @ThoiGianVao, ,";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -341,26 +382,18 @@ namespace QLyRV
                             {
                                 if (type == 0)
                                 {
-                                    add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
+                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
                                     add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@ThoiGianVao", "");
                                     add.Parameters.AddWithValue("@Khoa", 0);
-                                    add.Parameters.AddWithValue("@NguoiSua", "VB");
-                                    add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", status_text.Text);
-                                    add.Parameters.AddWithValue("@MaDS", MaDS);
 
                                 }
                                 else
                                 {
-                                    add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
+                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
                                     add.Parameters.AddWithValue("@ThoiGianRa", "");
                                     add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@Khoa", 1);
-                                    add.Parameters.AddWithValue("@NguoiSua", "VB");
-                                    add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", "");
-                                    add.Parameters.AddWithValue("@MaDS", "");
                                 }
                                 add.ExecuteNonQuery();
                             }
@@ -368,22 +401,18 @@ namespace QLyRV
                             {
                                 if (type != 0)
                                 {
-                                    String ch = "update RANGOAI set Khoa = 0, ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
+                                    String ch = "update NHATKIQN set Khoa = 0, ThoiGianRa = @TGR where rn.STT_DS = @STT";
                                     SqlCommand change = new SqlCommand(ch, conn);
                                     change.Parameters.AddWithValue("@TGR", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    change.Parameters.AddWithValue("@TGS", DateTime.Now.ToString("yyyy - MMM - d :g"));
+                                    change.Parameters.AddWithValue("@STT", reader["STT"].ToString());
                                     change.ExecuteNonQuery();
                                 }
                                 else
                                 {
-                                    add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
+                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
                                     add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@ThoiGianVao", "");
                                     add.Parameters.AddWithValue("@Khoa", 0);
-                                    add.Parameters.AddWithValue("@NguoiSua", "VB");
-                                    add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", status_text);
-                                    add.Parameters.AddWithValue("@MaDS", MaDS);
                                     add.ExecuteNonQuery();
                                 }
                             }
@@ -391,22 +420,18 @@ namespace QLyRV
                             {
                                 if (type == 0)
                                 {
-                                    String ch = "update RANGOAI set Khoa = 0, ThoiGianRa = @TGR, ThoiGianSua = @TGS where MaQN = @MaQN";
+                                    String ch = "update NHATKIQN set Khoa = 1, ThoiGianVao = @TGV where STT_DS = @STT";
                                     SqlCommand change = new SqlCommand(ch, conn);
-                                    change.Parameters.AddWithValue("@TGR", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    change.Parameters.AddWithValue("@TGS", DateTime.Now.ToString("yyyy - MMM - d :g"));
+                                    change.Parameters.AddWithValue("@TGV", DateTime.Now.ToString("yyyy - MMM - d :g"));
+                                    change.Parameters.AddWithValue("@STT", reader["STT"].ToString());
                                     change.ExecuteNonQuery();
                                 }
                                 else
                                 {
-                                    add.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
+                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
                                     add.Parameters.AddWithValue("@ThoiGianRa", "");
                                     add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@Khoa", 1);
-                                    add.Parameters.AddWithValue("@NguoiSua", "VB");
-                                    add.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@MaGT", "");
-                                    add.Parameters.AddWithValue("@MaDS", "");
                                     add.ExecuteNonQuery();
                                 }
                             }

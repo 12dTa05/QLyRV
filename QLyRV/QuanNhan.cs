@@ -44,7 +44,7 @@ namespace QLyRV
 
             if (Success.Type == 0)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa != 1 and Cap != 0";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where TonTai = 1 and MaDVCapTren = 'admin'";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -66,7 +66,7 @@ namespace QLyRV
             }
             else if(Success.Type == 2)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account + "' and DaXoa != 1";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account + "' and TonTai = 1";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -111,8 +111,8 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = @dv and dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
-            string query1 = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where dv.MaDV = qn.MaDV and qn.TonTai = @tt and qn.MaCV = cv.MaCV ";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where qn.TonTai = @tt and qn.MaDV = @dv ";
+            string query1 = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where  qn.TonTai = @tt  ";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -157,7 +157,7 @@ namespace QLyRV
         {
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, cv.MaCV, dv.MaDV from QUANNHAN qn, CHUCVU cv, DONVI dv where qn.MaDV = @dv and qn.TonTai = @tt and  qn.MaCV = cv.MaCV and dv.MaDV = qn.MaDV";
+            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV from QUANNHAN qn where qn.MaDV = @dv and qn.TonTai = @tt";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -177,7 +177,7 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string add = "insert into QUANNHAN values @MaQN, @HoTen, @CapBac, @TonTai, @NguoiSua, @ThoiGianSua, @MaCV, @MaDV";
+            string add = "insert into QUANNHAN values @MaQN, @HoTen, @CapBac, @TonTai, @MaCV, @MaDV";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -188,9 +188,7 @@ namespace QLyRV
                     cmd.Parameters.AddWithValue("@HoTen", textBox2.Text.ToString());
                     cmd.Parameters.AddWithValue("@CapBac", textBox6.Text.ToString());
                     cmd.Parameters.AddWithValue("@MaDV", textBox3.Text.ToString());
-                    cmd.Parameters.AddWithValue("@TonTai", 0);
-                    cmd.Parameters.AddWithValue("@NguoiSua", Account.account);
-                    cmd.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString());
+                    cmd.Parameters.AddWithValue("@TonTai", 1);
                     cmd.Parameters.AddWithValue("@MaCV", textBox5.Text.ToString());
 
                     cmd.ExecuteNonQuery();
@@ -207,7 +205,7 @@ namespace QLyRV
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string add = "update QUANNHAN set MaQN = @MaQN, HoTen = @HoTen, CapBac = @CapBac, TonTai = @TonTai, NguoiSua = @NguoiSua, ThoiGianSua = @ThoiGianSua, MaCV = @MaCV, MaDV = @MaDV where MaQN = @MaQN";
+            string add = "update QUANNHAN set MaQN = @MaQN, HoTen = @HoTen, CapBac = @CapBac, TonTai = @TonTai, MaCV = @MaCV, MaDV = @MaDV where MaQN = @MaQN";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -219,8 +217,6 @@ namespace QLyRV
                     cmd.Parameters.AddWithValue("@CapBac", textBox8.Text.ToString());
                     cmd.Parameters.AddWithValue("@MaDV", textBox10.Text.ToString());
                     cmd.Parameters.AddWithValue("@TonTai", textBox13.Text.ToString());
-                    cmd.Parameters.AddWithValue("@NguoiSua", Account.account);
-                    cmd.Parameters.AddWithValue("@ThoiGianSua", DateTime.Now.ToString());
                     cmd.Parameters.AddWithValue("@MaCV", textBox9.Text.ToString());
 
                     cmd.ExecuteNonQuery();
@@ -256,6 +252,7 @@ namespace QLyRV
                 textBox8.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
                 textBox9.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].Value.ToString();
                 textBox10.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].Value.ToString();
+                textBox13.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].Value.ToString();
             }
         }
     }

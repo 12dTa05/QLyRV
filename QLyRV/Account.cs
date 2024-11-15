@@ -94,7 +94,7 @@ namespace QLyRV
         {
             account = txtUsername.Text;
             password = txtPassword.Text;
-            string query = "SELECT * FROM TAIKHOAN WHERE TDN = '" + txtUsername.Text + "'";
+            string query = "SELECT * FROM TAIKHOAN WHERE TDN = '" + txtUsername.Text + "' and Khoa != 1";
             try
             {
                 SqlConnection conn = new SqlConnection(conn_string);

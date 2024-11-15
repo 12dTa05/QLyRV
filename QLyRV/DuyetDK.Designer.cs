@@ -67,9 +67,9 @@
             this.label3.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(30, 94);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 26);
+            this.label3.Size = new System.Drawing.Size(84, 26);
             this.label3.TabIndex = 30;
-            this.label3.Text = "CCCD";
+            this.label3.Text = "Mã QN";
             // 
             // textBox1
             // 
@@ -91,6 +91,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Change});
@@ -110,7 +111,7 @@
             this.Change.MinimumWidth = 6;
             this.Change.Name = "Change";
             this.Change.ReadOnly = true;
-            this.Change.Width = 125;
+            this.Change.Width = 37;
             // 
             // label1
             // 

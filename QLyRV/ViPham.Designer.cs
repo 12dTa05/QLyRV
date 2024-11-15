@@ -43,14 +43,13 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.textBox6 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(468, 533);
+            this.button2.Location = new System.Drawing.Point(164, 497);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(143, 35);
             this.button2.TabIndex = 72;
@@ -62,7 +61,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(28, 402);
+            this.label7.Location = new System.Drawing.Point(28, 390);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(88, 26);
             this.label7.TabIndex = 69;
@@ -71,17 +70,17 @@
             // textBox5
             // 
             this.textBox5.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox5.Location = new System.Drawing.Point(180, 394);
+            this.textBox5.Location = new System.Drawing.Point(180, 382);
             this.textBox5.Multiline = true;
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(305, 115);
+            this.textBox5.Size = new System.Drawing.Size(305, 87);
             this.textBox5.TabIndex = 68;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(28, 317);
+            this.label6.Location = new System.Drawing.Point(28, 307);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(91, 26);
             this.label6.TabIndex = 67;
@@ -90,7 +89,7 @@
             // textBox4
             // 
             this.textBox4.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox4.Location = new System.Drawing.Point(180, 309);
+            this.textBox4.Location = new System.Drawing.Point(180, 299);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(305, 34);
             this.textBox4.TabIndex = 66;
@@ -99,7 +98,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(26, 232);
+            this.label5.Location = new System.Drawing.Point(26, 228);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(75, 26);
             this.label5.TabIndex = 65;
@@ -108,7 +107,7 @@
             // textBox3
             // 
             this.textBox3.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox3.Location = new System.Drawing.Point(178, 224);
+            this.textBox3.Location = new System.Drawing.Point(178, 220);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(305, 34);
             this.textBox3.TabIndex = 64;
@@ -137,9 +136,9 @@
             this.label3.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(26, 89);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 26);
+            this.label3.Size = new System.Drawing.Size(84, 26);
             this.label3.TabIndex = 60;
-            this.label3.Text = "CCCD";
+            this.label3.Text = "Mã QN";
             // 
             // textBox1
             // 
@@ -153,7 +152,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(27, 20);
+            this.label2.Location = new System.Drawing.Point(17, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(116, 32);
             this.label2.TabIndex = 58;
@@ -161,6 +160,7 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(542, 80);
             this.dataGridView1.Name = "dataGridView1";
@@ -168,7 +168,7 @@
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(564, 429);
+            this.dataGridView1.Size = new System.Drawing.Size(564, 452);
             this.dataGridView1.TabIndex = 57;
             // 
             // label1
@@ -190,21 +190,11 @@
             this.dateTimePicker1.Size = new System.Drawing.Size(213, 30);
             this.dateTimePicker1.TabIndex = 55;
             // 
-            // textBox6
-            // 
-            this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox6.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox6.Location = new System.Drawing.Point(208, 18);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(162, 27);
-            this.textBox6.TabIndex = 73;
-            // 
             // ViPham
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1135, 599);
-            this.Controls.Add(this.textBox6);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.textBox5);
@@ -246,6 +236,5 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
-        private System.Windows.Forms.TextBox textBox6;
     }
 }

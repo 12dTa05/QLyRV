@@ -27,7 +27,7 @@ namespace QLyRV
             //dataGridView1.DataSource = GetDuyet().Tables[0];
             if (Success.Type == 0)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where DaXoa = 0 and Cap != 0";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where TonTai = 1 and MaDVCapTren = 'admin'";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -49,7 +49,7 @@ namespace QLyRV
             }
             else if(Success.Type == 2)
             {
-                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account +"' and DaXoa = 0";
+                string chucvuQuery = "SELECT MaDV FROM DONVI where MaDVCapTren ='" + Account.account +"' and TonTai = 1";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
@@ -94,17 +94,49 @@ namespace QLyRV
             if (e.RowIndex >= 0 && e.ColumnIndex == 0)
             {
                 // Retrieve the clicked cell
-                textBox1.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].ToString();
-                textBox2.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].ToString();
-                textBox3.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].ToString();
-                textBox4.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].ToString();
-                textBox5.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].ToString();
+                textBox1.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].Value.ToString();
+                textBox2.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
+                textBox3.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].Value.ToString();
+                textBox4.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].Value.ToString();
+                textBox5.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].Value.ToString();
             }
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = GetDuyet().Tables[0];
+            if(Success.Type != 0)
+            {
+                dataGridView1.DataSource = GetDuyet().Tables[0];
+            }
+            else
+            {
+                DataSet data = new DataSet();
+                DateTime selectedDate = dateTimePicker1.Value.Date; // Only date component
+
+                // Define the start and end of the day
+                DateTime startDate = selectedDate;             // Start of selected date at 00:00
+                DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
+
+                string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
+
+                string connectionString = conn_string;
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                    {
+                        // Set the parameters for the date range
+                        adapter.SelectCommand.Parameters.AddWithValue("@StartDate", startDate);
+                        adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
+                        adapter.SelectCommand.Parameters.AddWithValue("@DonVi", comboBox1.SelectedItem.ToString());
+
+                        // Fill the DataSet
+                        adapter.Fill(data);
+                    }
+                }
+                dataGridView1.DataSource = data.Tables[0];
+            }
         }
 
         DataSet GetDuyet()
@@ -117,7 +149,7 @@ namespace QLyRV
             DateTime startDate = selectedDate;             // Start of selected date at 00:00
             DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
 
-            string query = " SELECT ds.MaQN, qn.HoTen, dv.MaDV, ds.HinhThucRN, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao, ds.NguoiSua, ds.ThoiGianSua FROM DANHSACH ds, DONVI dv, QUANNHAN qn WHERE dv.MaDV = @DonVi and dv.MaDV = qn.MaDV and qn.MaQN = ds.MaQN and ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate";
+            string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn WHERE qn.MaDV = @DonVi and qn.MaQN = ds.MaQN and ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -158,7 +190,42 @@ namespace QLyRV
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
-            dataGridView1.DataSource = GetDuyet().Tables[0];
+            if(comboBox1.SelectedItem != null)
+            {
+                if (Success.Type != 0)
+                {
+                    dataGridView1.DataSource = GetDuyet().Tables[0];
+                }
+                else
+                {
+                    DataSet data = new DataSet();
+                    DateTime selectedDate = dateTimePicker1.Value.Date; // Only date component
+
+                    // Define the start and end of the day
+                    DateTime startDate = selectedDate;             // Start of selected date at 00:00
+                    DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
+
+                    string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
+
+                    string connectionString = conn_string;
+                    using (SqlConnection conn = new SqlConnection(connectionString))
+                    {
+                        conn.Open();
+
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                        {
+                            // Set the parameters for the date range
+                            adapter.SelectCommand.Parameters.AddWithValue("@StartDate", startDate);
+                            adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
+                            adapter.SelectCommand.Parameters.AddWithValue("@DonVi", comboBox1.SelectedItem.ToString());
+
+                            // Fill the DataSet
+                            adapter.Fill(data);
+                        }
+                    }
+                    dataGridView1.DataSource = data.Tables[0];
+                }
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
