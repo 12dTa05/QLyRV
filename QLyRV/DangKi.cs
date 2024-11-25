@@ -67,7 +67,7 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string add = "insert into DANHSACH values @Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, , , @MaQN";
+            string add = "insert into DANHSACH (HinhThucRV, LyDo, DiaDiem, ThoiGianRa, ThoiGianVao, MaQN) values (@Hinhthuc, @Lido, @DiaDiem, @TgianRa, @TgianVao, @MaQN)";
             string connectionString = conn_string;
             using(SqlConnection conn = new SqlConnection( connectionString ))
             {
@@ -77,8 +77,8 @@ namespace QLyRV
                     cmd.Parameters.AddWithValue("@HinhThuc", comboBox1.SelectedItem.ToString());
                     cmd.Parameters.AddWithValue("@Lido", textBox2.Text.ToString());
                     cmd.Parameters.AddWithValue("@DiaDiem", textBox3.Text.ToString());
-                    cmd.Parameters.AddWithValue("@TgianRa", dateTimePicker2.Value.ToString() + ' ' + textBox4.Text);
-                    cmd.Parameters.AddWithValue("@TgianVao", dateTimePicker3.Value.ToString() + ' ' + textBox5.Text);
+                    cmd.Parameters.AddWithValue("@TgianRa", dateTimePicker2.Value.ToString() );
+                    cmd.Parameters.AddWithValue("@TgianVao", dateTimePicker3.Value.ToString() );
                     cmd.Parameters.AddWithValue("@MaQN", textBox1.Text);
 
                     cmd.ExecuteNonQuery();

@@ -111,8 +111,8 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where qn.TonTai = @tt and qn.MaDV = @dv ";
-            string query1 = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where  qn.TonTai = @tt  ";
+            string query = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where qn.TonTai = @tt and qn.MaDV = @dv ";
+            string query1 = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where  qn.TonTai = @tt  ";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -157,7 +157,7 @@ namespace QLyRV
         {
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV from QUANNHAN qn where qn.MaDV = @dv and qn.TonTai = @tt";
+            string query = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV from QUANNHAN qn where qn.MaDV = @dv and qn.TonTai = @tt";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -177,14 +177,15 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string add = "insert into QUANNHAN values @MaQN, @HoTen, @CapBac, @TonTai, @MaCV, @MaDV";
+            string add = "insert into QUANNHAN (CCCD, MaQN, HoTen, CapBac, TonTai, MaCV, MaDV) values (@CCCD, @MaQN, @HoTen, @CapBac, @TonTai, @MaCV, @MaDV)";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(add, conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
+                    cmd.Parameters.AddWithValue("@CCCD", textBox1.Text.ToString());
+                    cmd.Parameters.AddWithValue("@MaQN", textBox4.Text.ToString());
                     cmd.Parameters.AddWithValue("@HoTen", textBox2.Text.ToString());
                     cmd.Parameters.AddWithValue("@CapBac", textBox6.Text.ToString());
                     cmd.Parameters.AddWithValue("@MaDV", textBox3.Text.ToString());
@@ -205,14 +206,14 @@ namespace QLyRV
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string add = "update QUANNHAN set MaQN = @MaQN, HoTen = @HoTen, CapBac = @CapBac, TonTai = @TonTai, MaCV = @MaCV, MaDV = @MaDV where MaQN = @MaQN";
+            string add = "update QUANNHAN set HoTen = @HoTen, CapBac = @CapBac, TonTai = @TonTai, MaCV = @MaCV, MaDV = @MaDV where MaQN = @MaQN";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(add, conn))
                 {
-                    cmd.Parameters.AddWithValue("@MaQN", textBox12.Text.ToString());
+                    cmd.Parameters.AddWithValue("@MaQN", textBox7.Text.ToString());
                     cmd.Parameters.AddWithValue("@HoTen", textBox11.Text.ToString());
                     cmd.Parameters.AddWithValue("@CapBac", textBox8.Text.ToString());
                     cmd.Parameters.AddWithValue("@MaDV", textBox10.Text.ToString());
@@ -248,11 +249,12 @@ namespace QLyRV
             {
                 // Retrieve the clicked cell
                 textBox12.Text = dataGridView1[e.ColumnIndex, e.RowIndex].Value.ToString();
-                textBox11.Text = dataGridView1[e.ColumnIndex + 1, e.RowIndex].Value.ToString();
-                textBox8.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
-                textBox9.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].Value.ToString();
-                textBox10.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].Value.ToString();
-                textBox13.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].Value.ToString();
+                textBox7.Text = dataGridView1[e.ColumnIndex +1, e.RowIndex].Value.ToString();
+                textBox11.Text = dataGridView1[e.ColumnIndex + 2, e.RowIndex].Value.ToString();
+                textBox8.Text = dataGridView1[e.ColumnIndex + 3, e.RowIndex].Value.ToString();
+                textBox9.Text = dataGridView1[e.ColumnIndex + 4, e.RowIndex].Value.ToString();
+                textBox10.Text = dataGridView1[e.ColumnIndex + 5, e.RowIndex].Value.ToString();
+                textBox13.Text = "1";
             }
         }
     }

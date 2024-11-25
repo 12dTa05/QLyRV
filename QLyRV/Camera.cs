@@ -32,13 +32,13 @@ namespace QLyRV
     {
         private FilterInfoCollection cameras;
         private VideoCaptureDevice camera;
-        public static int type;
+        public static int type = 1;
         private String MaGT, MaDS, B64;
         private Bitmap bitmap = null;
         private string cmd = @"..\..\API.py";
         private string rtspUrl = "rtsp://admin:12345678a@192.168.0.144:554/0";
 
-        public static string maQN, cccd, dv, ht, cv, cccdDan, htDan;
+        public static string maQN, cccd, dv, ht, cv, cccdDan, htDan, stt;
 
         private String date = DateTime.Now.ToString("yyyy-MM-dd :g");
         public Camera()
@@ -73,7 +73,7 @@ namespace QLyRV
 
             //RunCommand(cmd);
 
-            await RunPythonScript(cmd);
+            //await RunPythonScript(cmd);
         }
 
         private async Task RunPythonScript(string scriptPath)
@@ -285,18 +285,28 @@ namespace QLyRV
 
         private void ReadDan(Bitmap bitmap)
         {
-            //var readDan = new BarcodeReader()
-            //{
-            //    AutoRotate = true, // Tự xoay ảnh nếu cần
-            //    TryInverted = true // Thử đọc mã QR với độ tương phản đảo ngược
-            //}; 
-            //var result = readDan.Decode(bitmap);
+            string result = null;
 
-            B64 = ConvertImageToBase64String(pictureBox2.Image);
-            // Goi len server va tra ve ket qua
-            String server_ip = "127.0.0.1";
-            //String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
-            var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
+            try
+            {
+                var readDan = new BarcodeReader();
+                //{
+                //    AutoRotate = true, // Tự xoay ảnh nếu cần
+                //    TryInverted = true // Thử đọc mã QR với độ tương phản đảo ngược
+                //}; 
+                result = readDan.Decode(bitmap).ToString();
+            }
+            catch
+            {
+                MessageBox.Show("Khong doc duoc QR");
+            }
+            //MessageBox.Show(result.ToString());
+
+            //B64 = ConvertImageToBase64String(pictureBox2.Image);
+            //// Goi len server va tra ve ket qua
+            //String server_ip = "127.0.0.1";
+            ////String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
+            //var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
 
             if (result != null)
             {
@@ -311,8 +321,8 @@ namespace QLyRV
 
                         if(textBox4.Text == "")
                         {
-                            textBox4.Text = parts[4];
-                            textBox3.Text = parts[0];
+                            textBox4.Text = parts[0];
+                            textBox3.Text = parts[2];
 
                             cccd = textBox4.Text;
 
@@ -378,15 +388,15 @@ namespace QLyRV
                                 CCCD_TEXT.Text = reader["CCCD"].ToString();
                                 hoten_text.Text = reader["HoTen"].ToString();
 
-                                if (reader["MaCV"].ToString() == "0")
+                                if (reader["MaCV"].ToString() == "hv")
                                 {
                                     type = 0;
                                     // Second query to get TenDV
                                     string tenDvQuery = "SELECT ds.STT FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
                                     using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                     {
-                                        tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
-                                        tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
+                                        tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString());
+                                        tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
 
                                         using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
                                         {
@@ -478,20 +488,32 @@ namespace QLyRV
             //{
             //    MessageBox.Show("Khong the doc QR");
             //}
-            //var readQR = new BarcodeReader()
+            string result = null;
+            var readQR = new BarcodeReader();
+            var _result = readQR.Decode(bitmap);
+            
+            if(_result == null)
+            {
+                MessageBox.Show("Khong the doc ma QR");
+            }
+            else
+            {
+                result = _result.ToString();
+            }
+            
             //{
             //    AutoRotate = true, // Tự xoay ảnh nếu cần
             //    TryInverted = true // Thử đọc mã QR với độ tương phản đảo ngược
             //}; 
-            //var result = readQR.Decode(bitmap);
+            
 
-            B64 = ConvertImageToBase64String(pictureBox2.Image);
-            // Goi len server va tra ve ket qua
-            String server_ip = "127.0.0.1";
-            //String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
-            var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
+            //B64 = ConvertImageToBase64String(pictureBox2.Image);
+            //// Goi len server va tra ve ket qua
+            //String server_ip = "127.0.0.1";
+            ////String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
+            //var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
 
-            MessageBox.Show(result);
+            //MessageBox.Show(result.ToString());
 
             if (result != null)
             {
@@ -500,13 +522,13 @@ namespace QLyRV
 
                 if (parts.Length >= 0)
                 {
-                    CCCD_TEXT.Text = parts[4]; 
-                    hoten_text.Text = parts[0];
+                    CCCD_TEXT.Text = parts[0]; 
+                    hoten_text.Text = parts[2];
 
                     cccd = CCCD_TEXT.Text;
                     ht = hoten_text.Text;
 
-                    string chucvuQuery = "SELECT cv.ChucVu FROM CHUCVU cv JOIN QUANNHAN qn ON cv.MaCV = qn.MaCV WHERE qn.CCCD = @MaQN";
+                    string chucvuQuery = "SELECT MaCV FROM QUANNHAN  WHERE CCCD = @MaQN and TonTai = 1";
                     string connectionString = conn_string;
 
                     try
@@ -518,52 +540,60 @@ namespace QLyRV
                             // First query to get ChucVu
                             using (SqlCommand chucvuCommand = new SqlCommand(chucvuQuery, conn))
                             {
-                                chucvuCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
+                                chucvuCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
 
                                 using (SqlDataReader reader = chucvuCommand.ExecuteReader())
                                 {
                                     if (reader.Read() )
                                     {
-                                        cv = reader["Chucvu"].ToString();
-
-                                        if (reader["ChucVu"].ToString() == "Học viên")
+                                        cv = reader["MaCV"].ToString();
+                                        //MessageBox.Show(cv);
+                                        reader.Close();
+                                        if (cv == "hv")
                                         {
-                                            reader.Close();  // Close reader before executing the second query
+                                              // Close reader before executing the second query
                                             type = 0;
                                             // Second query to get TenDV
                                             string tenDvQuery = "SELECT dv.TenDV, ds.STT, qn.MaQN FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaDV = qn.MaDV WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
-                                            using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
+                                            try
                                             {
-                                                tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
-                                                tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
-
-                                                using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
+                                                using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                                 {
-                                                    if (dvReader.Read() && dvReader["STT"] != null)
-                                                    {
-                                                        textBox7.Text = dvReader["MaQN"].ToString();
-                                                        donvi_text.Text = dvReader["TenDV"].ToString();
-                                                        MaDS = dvReader["STT"].ToString();
-                                                        //MaGT = reader["MaGT"].ToString();
+                                                    tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString());
+                                                    tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
 
-                                                        dv = donvi_text.Text;
-                                                    }
-                                                    else
+                                                    using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
                                                     {
-                                                        MessageBox.Show("Không có trong danh sách ra ngoài");
+                                                        if (dvReader.Read() && dvReader["STT"] != null)
+                                                        {
+                                                            textBox7.Text = dvReader["MaQN"].ToString();
+                                                            donvi_text.Text = dvReader["TenDV"].ToString();
+                                                            MaDS = dvReader["STT"].ToString();
+                                                            //MaGT = reader["MaGT"].ToString();
+
+                                                            dv = donvi_text.Text;
+                                                        }
+                                                        else
+                                                        {
+                                                            MessageBox.Show("Không có trong danh sách ra ngoài");
+                                                        }
                                                     }
                                                 }
+                                            }
+                                            catch(Exception ex)
+                                            {
+                                                MessageBox.Show(ex.ToString());
                                             }
                                         }
                                         else
                                         {
-                                            reader.Close();  // Close reader before executing the second query
-                                            //type = 0;
+                                            //reader.Close();  // Close reader before executing the second query
+                                            type = 1;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, qn.MaQN , ds.STT FROM DANHSACH ds join QUANNHAN qn on ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE qn.CCCD = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, qn.MaQN , ds.STT FROM DANHSACH ds join QUANNHAN qn on ds.MaQN = qn.MaQN JOIN DONVI dv ON qn.MADV = dv.MaDV WHERE qn.CCCD = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
-                                                tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
+                                                tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT.Text);
 
                                                 using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
                                                 {
@@ -577,7 +607,7 @@ namespace QLyRV
                                                     }
                                                     else
                                                     {
-                                                        MessageBox.Show("Không có dữ liệu");
+                                                        MessageBox.Show("Hay thu lai");
                                                     }
                                                 }
                                             }
@@ -607,19 +637,7 @@ namespace QLyRV
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //if(tabControl1.SelectedIndex == 1)
-            //{
-            //    type = 1;
-            //}
-            AdminForm af = new AdminForm(1);
-            af.Show();
-            af.OpenChildForm(new ViPham());    
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            string ktra = "select rn.Khoa, ds.STT from NHATKIQN rn, DANHSACH ds where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (rn.ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or rn.ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
-            string addNhatKi = "insert into NHATKIQN rn values @Khoa, @STT_DS, @ThoiGianRa, @ThoiGianVao, ,";
+            string ktra = "select rn.STT from NHATKYQN rn, DANHSACH ds where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (rn.ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or rn.ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -628,70 +646,128 @@ namespace QLyRV
                 {
                     using (SqlDataReader reader = NK.ExecuteReader())
                     {
+                        //if(tabControl1.SelectedIndex == 1)
+                        //{
+                        //    type = 1;
+                        //}
                         if (reader.Read())
                         {
-                            SqlCommand add = new SqlCommand(addNhatKi, conn);
-                            if (reader["Khoa"].ToString() == "")
-                            {
-                                if (type == 0)
-                                {
-                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
-                                    add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@ThoiGianVao", "");
-                                    add.Parameters.AddWithValue("@Khoa", 0);
-
-                                }
-                                else
-                                {
-                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
-                                    add.Parameters.AddWithValue("@ThoiGianRa", "");
-                                    add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@Khoa", 1);
-                                }
-                                add.ExecuteNonQuery();
-                            }
-                            else if (reader["Khoa"].ToString() == "1")
-                            {
-                                if (type != 0)
-                                {
-                                    String ch = "update NHATKIQN set Khoa = 0, ThoiGianRa = @TGR where rn.STT_DS = @STT";
-                                    SqlCommand change = new SqlCommand(ch, conn);
-                                    change.Parameters.AddWithValue("@TGR", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    change.Parameters.AddWithValue("@STT", reader["STT"].ToString());
-                                    change.ExecuteNonQuery();
-                                }
-                                else
-                                {
-                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
-                                    add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@ThoiGianVao", "");
-                                    add.Parameters.AddWithValue("@Khoa", 0);
-                                    add.ExecuteNonQuery();
-                                }
-                            }
-                            else
-                            {
-                                if (type == 0)
-                                {
-                                    String ch = "update NHATKIQN set Khoa = 1, ThoiGianVao = @TGV where STT_DS = @STT";
-                                    SqlCommand change = new SqlCommand(ch, conn);
-                                    change.Parameters.AddWithValue("@TGV", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    change.Parameters.AddWithValue("@STT", reader["STT"].ToString());
-                                    change.ExecuteNonQuery();
-                                }
-                                else
-                                {
-                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
-                                    add.Parameters.AddWithValue("@ThoiGianRa", "");
-                                    add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
-                                    add.Parameters.AddWithValue("@Khoa", 1);
-                                    add.ExecuteNonQuery();
-                                }
-                            }
+                            maQN = textBox7.Text;
+                            stt = reader["STT"].ToString();
                         }
                     }
                 }
             }
+            AdminForm af = new AdminForm(1);
+            af.Show();
+            af.OpenChildForm(new ViPham());    
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            string ktra = "select rn.Khoa, rn.STT from NHATKYQN rn, DANHSACH ds where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (rn.ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or rn.ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
+            string addNhatKi = "insert into NHATKYQN (Khoa, STT_DS, ThoiGianRa, ThoiGianVao) values (@Khoa, @STT_DS, @ThoiGianRa, @ThoiGianVao)";
+            string connectionString = conn_string;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand NK = new SqlCommand(ktra, conn))
+                {
+                    using (SqlDataReader reader = NK.ExecuteReader())
+                    {
+                        
+                        if (reader.Read())
+                        {
+                            //MessageBox.Show(type.ToString());
+                            //MessageBox.Show("Checked");
+                            SqlCommand add = new SqlCommand(addNhatKi, conn);
+                            if (reader["Khoa"].ToString() == "True")
+                            {
+                                
+                                if (type != 0)
+                                {
+                                    String ch = "update NHATKYQN set Khoa = 0, ThoiGianRa = @TGR where STT = @STT";
+                                    SqlCommand change = new SqlCommand(ch, conn);
+                                    change.Parameters.AddWithValue("@TGR", DateTime.Now);
+                                    change.Parameters.AddWithValue("@STT", Int32.Parse(reader["STT"].ToString()));
+
+                                    reader.Close();
+
+                                    change.ExecuteNonQuery();
+                                    MessageBox.Show("Done");
+                                }
+                                else
+                                {
+                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
+                                    add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now);
+                                    add.Parameters.AddWithValue("@ThoiGianVao", "");
+                                    add.Parameters.AddWithValue("@Khoa", 0);
+
+                                    reader.Close();
+
+                                    add.ExecuteNonQuery();
+                                    MessageBox.Show("Done");
+                                }
+                            }
+                            else
+                            {
+                                reader.Close();
+                                if (type == 0)
+                                {
+                                    String ch = "update NHATKYQN set Khoa = 1, ThoiGianVao = @TGV where STT = @STT";
+                                    SqlCommand change = new SqlCommand(ch, conn);
+                                    change.Parameters.AddWithValue("@TGV", DateTime.Now);
+                                    change.Parameters.AddWithValue("@STT", Int32.Parse(reader["STT"].ToString()));
+
+                                    reader.Close();
+
+                                    change.ExecuteNonQuery();
+                                    MessageBox.Show("Done");
+                                }
+                                else
+                                {
+                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
+                                    add.Parameters.AddWithValue("@ThoiGianRa", "");
+                                    add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now);
+                                    add.Parameters.AddWithValue("@Khoa", 1);
+
+                                    reader.Close();
+
+                                    add.ExecuteNonQuery();
+                                    MessageBox.Show("Done");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            reader.Close();
+                            SqlCommand add = new SqlCommand(addNhatKi, conn);
+                            if (type == 0)
+                            {
+                                add.Parameters.AddWithValue("@STT_DS", MaDS);
+                                add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now);
+                                add.Parameters.AddWithValue("@ThoiGianVao", "");
+                                add.Parameters.AddWithValue("@Khoa", 0);
+
+                            }
+                            else
+                            {
+                                add.Parameters.AddWithValue("@STT_DS", MaDS);
+                                add.Parameters.AddWithValue("@ThoiGianRa", "");
+                                add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now);
+                                add.Parameters.AddWithValue("@Khoa", 1);
+                            }
+                            add.ExecuteNonQuery();
+                            MessageBox.Show("Done");
+                        }
+                    }
+                }
+            }
+
+            textBox7.Text = "";
+            CCCD_TEXT.Text = "";
+            hoten_text.Text = "";
+            donvi_text.Text = "";
         }
     }
 }

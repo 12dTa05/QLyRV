@@ -28,8 +28,8 @@ namespace QLyRV
             dateTimePicker2.Format = DateTimePickerFormat.Custom;
             dateTimePicker2.CustomFormat = "yyyy-MM-d";
 
-            dateTimePicker1.MaxDate = DateTime.Now;
-            dateTimePicker2.MaxDate = DateTime.Now;
+            //dateTimePicker1.MaxDate = DateTime.Now;
+            //dateTimePicker2.MaxDate = DateTime.Now;
 
             dateTimePicker1.Value = DateTime.Now;
 
@@ -73,21 +73,21 @@ namespace QLyRV
             if(this.Type == 0 && this.Type == 1)
             {
                 if (checkBox1.Checked)
-                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and vp.LoaiVP = lvp.LoaiVP";
+                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, LoaiVP lvp where rn.ThoiGianRa >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and vp.LoaiVP = lvp.LoaiVP";
                 else                                                                                                  
-                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao = '" + dateTimePicker1.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and vp.LoaiVP = lvp.LoaiVP";
+                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, LoaiVP lvp where rn.ThoiGianVao = '" + dateTimePicker1.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and vp.LoaiVP = lvp.LoaiVP";
             }                                                                                                         
             else if(this.Type == 2)                                                                                   
             {                                                                                                         
                 if (checkBox1.Checked)                                                                                
-                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
+                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianRa >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
                 else                                                                                                  
                     query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao = '" + dateTimePicker1.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
             }
             else 
             {
                 if (checkBox1.Checked)
-                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
+                    query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianRa >= '" + dateTimePicker1.Value.ToString() + "' and rn.ThoiGianVao <= '" + dateTimePicker2.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
                 else
                     query = "select lvp.TenVP as ViPham, qn.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, rn.ThoiGianRa, rn.ThoiGianVao from NHATKYQN rn, DANHSACH ds, QUANNHAN qn, VIPHAM vp, DONVI dv, LoaiVP lvp where rn.ThoiGianVao = '" + dateTimePicker1.Value.ToString() + "' and rn.STT_DS = ds.STT and ds.MaQN = qn.MaQN and qn.MaQN = vp.MaQN and qn.MaDV = '" + Account.account + "' and vp.LoaiVP = lvp.LoaiVP";
             }

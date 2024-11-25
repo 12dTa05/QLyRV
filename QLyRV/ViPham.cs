@@ -29,6 +29,7 @@ namespace QLyRV
             textBox2.Text = Camera.ht;
             textBox3.Text = Camera.dv;
             //textBox6.Text = (Count() + 1).ToString();
+            dateTimePicker1.Text = DateTime.Now.ToString();
 
             dataGridView1.DataSource = GetVP().Tables[0];
         }
@@ -48,7 +49,7 @@ namespace QLyRV
                     {
                         if (reader.Read())
                         {
-                            count = Int32.Parse(reader.GetString(0));
+                            count = Int32.Parse(reader["MaVP"].ToString());
                         }
 
                     }
@@ -62,7 +63,7 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT vp.MaQN, qn.HoTen, qn.MaDV lvp.TenVP, vp.GhiChu, vp.ThoiGian from VIPHAM vp, QUANNHAN qn, LoaiVP where vp.MaQN = qn.MaQN and vp.ThoiGian = @tg and vp.LoaiVP = lvp.LoaiVP";
+            string query = " SELECT vp.MaQN, qn.HoTen, qn.MaDV, lvp.TenVP, vp.GhiChu, vp.ThoiGian from VIPHAM vp, QUANNHAN qn, LoaiVP lvp where vp.MaQN = qn.MaQN and vp.ThoiGian = @tg and vp.LoaiVP = lvp.LoaiVP";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -87,19 +88,18 @@ namespace QLyRV
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                if (Camera.type == 0)
+                string add = "insert into VIPHAM values  (@LoaiVP, @tg, @ghichu, @MaQN) \n" + "update NHATKYQN set MaVP = @c, Khoa = 1, ThoiGianVao = @tg where STT = @stt";
+                using (SqlCommand cmd = new SqlCommand(add, conn))
                 {
-                    string add = "insert into VIPHAM values  @LoaiVP, @tg, @ghichu, @MaQN \n" + "update NHATKIQN set MaVP = @c, Khoa = 1, ThoiGianVao = @tg where STT_DS = (select STT from DANHSACH where MaQN = @MaQN)";
-                    using (SqlCommand cmd = new SqlCommand(add, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@LoaiVP", textBox4.Text.ToString());
-                        cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
-                        cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
-                        cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
-                        cmd.Parameters.AddWithValue("@c", Count().ToString());
+                    cmd.Parameters.AddWithValue("@LoaiVP", textBox4.Text.ToString());
+                    cmd.Parameters.AddWithValue("@tg", DateTime.Now.ToString());
+                    cmd.Parameters.AddWithValue("@ghichu", textBox5.Text.ToString());
+                    cmd.Parameters.AddWithValue("@MaQN", textBox1.Text.ToString());
+                    cmd.Parameters.AddWithValue("@c", Count().ToString());
+                    cmd.Parameters.AddWithValue("@stt", Int32.Parse(Camera.stt));
 
-                        cmd.ExecuteNonQuery();
-                    }
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Done");
                 }
                 //    else if(Camera.type == 1)
                 //    {
@@ -171,6 +171,13 @@ namespace QLyRV
                 //textBox4.Text = "";
                 //textBox5.Text = "";
             }
+
+            dataGridView1.DataSource = GetVP().Tables[0];
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = GetVP().Tables[0];
         }
     }
 }
