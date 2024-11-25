@@ -18,6 +18,13 @@ using static QLyRV.Database;
 using static QLyRV.Account;
 using static QLyRV.AdminForm;
 using System.Web;
+using System.IO;
+using System.Net;
+using System.Diagnostics;
+using System.Threading;
+using FFmpeg.AutoGen;
+using Vlc.DotNet.Forms;
+using System.Drawing.Drawing2D;
 
 namespace QLyRV
 {
@@ -26,7 +33,10 @@ namespace QLyRV
         private FilterInfoCollection cameras;
         private VideoCaptureDevice camera;
         public static int type;
-        private String MaGT, MaDS;
+        private String MaGT, MaDS, B64;
+        private Bitmap bitmap = null;
+        private string cmd = @"..\..\API.py";
+        private string rtspUrl = "rtsp://admin:12345678a@192.168.0.144:554/0";
 
         public static string maQN, cccd, dv, ht, cv, cccdDan, htDan;
 
@@ -43,37 +53,233 @@ namespace QLyRV
                 comboBox1.Items.Add(info.Name);
             }
             comboBox1.SelectedIndex = 0;
-        }
 
-        private void Camera_Load(object sender, EventArgs e)
-        {
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void Camera_Load(object sender, EventArgs e)
         {
+            string rtspUrl = "rtsp://admin:12345678a@192.168.0.144:554/1";
+
+            // Example of initializing FFmpeg for RTSP stream (if you use FFmpeg.AutoGen)
+            //ffmpeg.avdevice_register_all();
+            //ffmpeg.avformat_network_init();
+            //ffmpeg.avcodec_register_all();
+
             camera = new VideoCaptureDevice(cameras[comboBox1.SelectedIndex].MonikerString);
+            //camera = new VideoCaptureDevice(rtspUrl);
             camera.NewFrame += new NewFrameEventHandler(Video_NewFrame);
             camera.Start();
+
+            //RunCommand(cmd);
+
+            await RunPythonScript(cmd);
+        }
+
+        private async Task RunPythonScript(string scriptPath)
+        {
+            await Task.Run(() =>
+            {
+                var process = new Process
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "python",             // Python executable
+                        Arguments = scriptPath,          // Path to Python script
+                        RedirectStandardOutput = true,   // Capture output
+                        RedirectStandardError = true,    // Capture errors
+                        UseShellExecute = false,         // Required for redirection
+                        CreateNoWindow = true            // Don't create a console window
+                    }
+                };
+
+                process.Start();
+
+                //string output = process.StandardOutput.ReadToEnd();
+                //string error = process.StandardError.ReadToEnd();
+
+                process.WaitForExit();
+
+                //// Optionally log output or error
+                //if (!string.IsNullOrEmpty(output))
+                //{
+                //    Console.WriteLine("[OUTPUT] " + output);
+                //}
+
+                //if (!string.IsNullOrEmpty(error))
+                //{
+                //    Console.Error.WriteLine("[ERROR] " + error);
+                //}
+
+                //if (process.ExitCode != 0)
+                //{
+                //    throw new Exception($"Python script exited with code {process.ExitCode}: {error}");
+                //}
+            });
+        }
+
+
+        public static string ConvertImageToBase64String(Image image)
+        {
+            var ratioX = (double)50 / image.Width;
+            var ratioY = (double)50 / image.Height;
+            var ratio = Math.Min(ratioX, ratioY);
+
+            var newWidth = (int)(image.Width * ratio);
+            var newHeight = (int)(image.Height * ratio);
+
+            var resizedImage = new Bitmap(newWidth, newHeight);
+            using (var graphics = Graphics.FromImage(resizedImage))
+            {
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+
+                resizedImage.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        private String EscapeData(String B64)
+        {
+            int B64_length = B64.Length;
+            if (B64_length <= 32000)
+            {
+                return Uri.EscapeDataString(B64);
+            }
+
+
+            int idx = 0;
+            StringBuilder builder = new StringBuilder();
+            String substr = B64.Substring(idx, 32000);
+            while (idx < B64_length)
+            {
+                builder.Append(Uri.EscapeDataString(substr));
+                idx += 32000;
+
+                if (idx < B64_length)
+                {
+
+                    substr = B64.Substring(idx, Math.Min(32000, B64_length - idx));
+                }
+
+            }
+            return builder.ToString();
+
+        }
+
+        public String sendPOST(String url, String B64)
+        {
+            try
+            {
+
+                var request = (HttpWebRequest)WebRequest.Create(url);
+                request.Timeout = 50000;
+                var postData = "image=" + EscapeData(B64);
+
+                var data = Encoding.ASCII.GetBytes(postData);
+
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                return responseString;
+            }
+            catch (Exception ex)
+            {
+                return "Exception" + ex.ToString();
+            }
+        }
+
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            //camera = new VideoCaptureDevice(cameras[comboBox1.SelectedIndex].MonikerString);
+            ////camera = new VideoCaptureDevice("rtsp://admin:12052003a@192.168.0.144:554/onvif1");
+            //camera.NewFrame += new NewFrameEventHandler(Video_NewFrame);
+            //camera.Start();
+            
+            if (!camera.IsRunning)
+            {
+                camera.Start();
+                button6.Text = "CATCH";
+            }
+            else
+            {
+                //var process = new Process
+                //{
+                //    StartInfo = new ProcessStartInfo
+                //    {
+                //        FileName = "python", // Nếu trên Linux/MacOS, thay bằng "bash"
+                //        Arguments = cmd, // Chạy lệnh và thoát
+                //        RedirectStandardOutput = true, // Chuyển hướng đầu ra
+                //        RedirectStandardError = true, // Chuyển hướng lỗi
+                //        UseShellExecute = false, // Không sử dụng shell bên ngoài
+                //        CreateNoWindow = true // Không tạo cửa sổ mới
+                //    }
+                //};
+
+                //process.Start();
+                //
+
+                StopCam();
+                
+                //RunCommand(cmd);
+                
+                //RunCommand(cmd);
+                if (tabControl1.SelectedIndex == 0)
+                {
+                    //StopCam();
+                    ReadQR(bitmap);
+                }
+                else
+                {
+                    //StopCam();
+                    ReadDan(bitmap);
+                }
+
+                //process.Kill();
+                button6.Text = "START";
+            }
         }
 
         private void Video_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            // Capture the frame as a Bitmap
-            Bitmap bitmap = (Bitmap)eventArgs.Frame.Clone();
-            StopCam();
+            
+            bitmap = (Bitmap)eventArgs.Frame.Clone();
+            pictureBox2.Image?.Dispose();
+            pictureBox2.Image = bitmap;
+
             // Process the frame to read a barcode
-            if(tabControl1.SelectedIndex == 0)
-            {
-                ReadQR(bitmap);
-            }
-            else
-            {
-                ReadDan(bitmap);
-            }
+            
+
+            //if(tabControl1.SelectedIndex == 0)
+            //{
+            //    //StopCam();
+            //    ReadQR(bitmap);
+            //}
+            //else
+            //{
+            //    //StopCam();
+            //    ReadDan(bitmap);
+            //}
 
             // Dispose of the bitmap to free up memory
-            bitmap.Dispose();
+            //bitmap.Dispose();
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -93,15 +299,26 @@ namespace QLyRV
 
         private void ReadDan(Bitmap bitmap)
         {
-            var readDan = new BarcodeReader();
-            var result = readDan.Decode(bitmap);
+            //var readDan = new BarcodeReader()
+            //{
+            //    AutoRotate = true, // Tự xoay ảnh nếu cần
+            //    TryInverted = true // Thử đọc mã QR với độ tương phản đảo ngược
+            //}; 
+            //var result = readDan.Decode(bitmap);
+
+            B64 = ConvertImageToBase64String(pictureBox2.Image);
+            // Goi len server va tra ve ket qua
+            String server_ip = "127.0.0.1";
+            //String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
+            var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
+
             if (result != null)
             {
-                StopCam();
+                //StopCam();
                 if (result != null)
                 {
                     StopCam();
-                    string[] parts = result.Text.Split('|');
+                    string[] parts = result.ToString().Split('|');
 
                     if (parts.Length >= 0)
                     {
@@ -112,6 +329,7 @@ namespace QLyRV
                             textBox3.Text = parts[0];
 
                             cccd = textBox4.Text;
+
                             ht = textBox3.Text;
 
                             string quan = "select qn.MaQN, qn.HoTen, dv.TenDV from DONVI dv, QUANNHAN qn where qn.CCCD = @cccd and qn.MaDV = dv.MaDV";
@@ -153,7 +371,7 @@ namespace QLyRV
         private void button3_Click(object sender, EventArgs e)
         {
             string qn = textBox6.Text;
-            string quan = "select qn.CCCD, qn.HoTen, dv.TenDV from DONVI dv, QUANNHAN qn where qn.MaQN = @qn and qn.MaDV = dv.MaDV";
+            string quan = "select qn.CCCD, qn.HoTen, qn.MaCV, dv.TenDV from DONVI dv, QUANNHAN qn where qn.MaQN = @qn and qn.MaDV = dv.MaDV";
             string connectionString = conn_string;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -170,16 +388,47 @@ namespace QLyRV
                             if(tabControl1.SelectedIndex == 0)
                             {
                                 textBox7.Text = textBox6.Text;
-                                textBox2.Text = reader["TenDV"].ToString();
+                                donvi_text.Text = reader["TenDV"].ToString();
                                 CCCD_TEXT.Text = reader["CCCD"].ToString();
                                 hoten_text.Text = reader["HoTen"].ToString();
+
+                                if (reader["MaCV"].ToString() == "0")
+                                {
+                                    type = 0;
+                                    // Second query to get TenDV
+                                    string tenDvQuery = "SELECT ds.STT FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
+                                    using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
+                                    {
+                                        tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
+                                        tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
+
+                                        using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
+                                        {
+                                            if (dvReader.Read() && dvReader["STT"] != null)
+                                            { 
+                                                MaDS = dvReader["STT"].ToString();
+                                                //MaGT = reader["MaGT"].ToString();
+
+                                                dv = donvi_text.Text;
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show("Không có trong danh sách ra ngoài");
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
-                                //textBox2.Text = reader["TenDV"].ToString();
-                                textBox4.Text = reader["CCCD"].ToString();
+                                textBox2.Text = reader["TenDV"].ToString();
+                                textBox4.Text = textBox6.Text;
                                 textBox3.Text = reader["HoTen"].ToString();
                             }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Khong co du lieu");
                         }
                     }
                 }
@@ -188,7 +437,7 @@ namespace QLyRV
 
         private void button5_Click(object sender, EventArgs e)
         {
-            string ktra = "select Khoa from NHATKYTN  where CCCD_QuanNhan = @cccd and ThoiGianVao = '" + DateTime.Now.ToString() + "'";
+            string ktra = "select Khoa from NHATKYTN  where MaQN = @cccd and ThoiGianVao = '" + DateTime.Now.ToString() + "'";
             
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -196,6 +445,7 @@ namespace QLyRV
                 conn.Open();
                 using (SqlCommand NK = new SqlCommand(ktra, conn))
                 {
+                    NK.Parameters.AddWithValue("@cccd", textBox4.Text);
                     using (SqlDataReader reader = NK.ExecuteReader())
                     {
                         if (reader.Read())
@@ -238,13 +488,29 @@ namespace QLyRV
 
         private void ReadQR(Bitmap bitmap)
         {
-            var readQR = new BarcodeReader();
-            var result = readQR.Decode(bitmap);
+            //if (bitmap == null)
+            //{
+            //    MessageBox.Show("Khong the doc QR");
+            //}
+            //var readQR = new BarcodeReader()
+            //{
+            //    AutoRotate = true, // Tự xoay ảnh nếu cần
+            //    TryInverted = true // Thử đọc mã QR với độ tương phản đảo ngược
+            //}; 
+            //var result = readQR.Decode(bitmap);
+
+            B64 = ConvertImageToBase64String(pictureBox2.Image);
+            // Goi len server va tra ve ket qua
+            String server_ip = "127.0.0.1";
+            //String retStr2 = sendPOST_2("http://" + server_ip + ":5000/confirm", B64, B64_2);
+            var result = sendPOST("http://" + server_ip + ":5000/translate", B64);
+
+            MessageBox.Show(result);
 
             if (result != null)
             {
-                StopCam();
-                string[] parts = result.Text.Split('|');
+                //StopCam();
+                string[] parts = result.ToString().Split('|');
 
                 if (parts.Length >= 0)
                 {
@@ -279,7 +545,7 @@ namespace QLyRV
                                             reader.Close();  // Close reader before executing the second query
                                             type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, ds.MaDS, qn.MaQN FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaDV = qn.MaDV WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, ds.STT, qn.MaQN FROM DANHSACH ds  JOIN QUANNHAN qn ON ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaDV = qn.MaDV WHERE ds.ThoiGianRa = @ThoiGianRa AND qn.CCCD = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@ThoiGianRa", this.date);
@@ -287,11 +553,11 @@ namespace QLyRV
 
                                                 using (SqlDataReader dvReader = tenDvCommand.ExecuteReader())
                                                 {
-                                                    if (dvReader.Read() && dvReader["MaDS"] != null)
+                                                    if (dvReader.Read() && dvReader["STT"] != null)
                                                     {
                                                         textBox7.Text = dvReader["MaQN"].ToString();
                                                         donvi_text.Text = dvReader["TenDV"].ToString();
-                                                        MaDS = dvReader["MaDS"].ToString();
+                                                        MaDS = dvReader["STT"].ToString();
                                                         //MaGT = reader["MaGT"].ToString();
 
                                                         dv = donvi_text.Text;
@@ -308,7 +574,7 @@ namespace QLyRV
                                             reader.Close();  // Close reader before executing the second query
                                             //type = 0;
                                             // Second query to get TenDV
-                                            string tenDvQuery = "SELECT dv.TenDV, qn.MaQN FROM QUANNHAN qn JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE qn.CCCD = @MaQN";
+                                            string tenDvQuery = "SELECT dv.TenDV, qn.MaQN , ds.STT FROM DANHSACH ds join QUANNHAN qn on ds.MaQN = qn.MaQN JOIN DONVI dv ON dv.MaQN = qn.MaQN WHERE qn.CCCD = @MaQN";
                                             using (SqlCommand tenDvCommand = new SqlCommand(tenDvQuery, conn))
                                             {
                                                 tenDvCommand.Parameters.AddWithValue("@MaQN", CCCD_TEXT);
@@ -319,6 +585,7 @@ namespace QLyRV
                                                     {
                                                         donvi_text.Text = dvReader["TenDV"].ToString();
                                                         textBox7.Text = dvReader["MaQN"].ToString();
+                                                        MaDS = dvReader["STT"].ToString();
 
                                                         dv = donvi_text.Text;
                                                     }
@@ -365,7 +632,7 @@ namespace QLyRV
 
         private void button4_Click(object sender, EventArgs e)
         {
-            string ktra = "select rn.Khoa, ds.STT from NHATKIQN, DANHSACH ds rn where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
+            string ktra = "select rn.Khoa, ds.STT from NHATKIQN rn, DANHSACH ds where rn.STT_DS = ds.STT and ds.MaQN = '" + textBox7.Text + "' and (rn.ThoiGianRa = '" + DateTime.Now.ToString("yyyy-MM-d") + "' or rn.ThoiGianVao = '" + DateTime.Now.ToString("yyyy-MM-d") + "')";
             string addNhatKi = "insert into NHATKIQN rn values @Khoa, @STT_DS, @ThoiGianRa, @ThoiGianVao, ,";
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -382,7 +649,7 @@ namespace QLyRV
                             {
                                 if (type == 0)
                                 {
-                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
+                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
                                     add.Parameters.AddWithValue("@ThoiGianRa", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@ThoiGianVao", "");
                                     add.Parameters.AddWithValue("@Khoa", 0);
@@ -390,7 +657,7 @@ namespace QLyRV
                                 }
                                 else
                                 {
-                                    add.Parameters.AddWithValue("@STT_DS", reader["STT"].ToString());
+                                    add.Parameters.AddWithValue("@STT_DS", MaDS);
                                     add.Parameters.AddWithValue("@ThoiGianRa", "");
                                     add.Parameters.AddWithValue("@ThoiGianVao", DateTime.Now.ToString("yyyy - MMM - d :g"));
                                     add.Parameters.AddWithValue("@Khoa", 1);

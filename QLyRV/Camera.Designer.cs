@@ -31,6 +31,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -61,8 +63,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -114,6 +114,25 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "  Quân    ";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.label5.Location = new System.Drawing.Point(36, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(98, 26);
+            this.label5.TabIndex = 78;
+            this.label5.Text = "Mã QN :";
+            // 
+            // textBox7
+            // 
+            this.textBox7.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox7.Location = new System.Drawing.Point(157, 48);
+            this.textBox7.Name = "textBox7";
+            this.textBox7.ReadOnly = true;
+            this.textBox7.Size = new System.Drawing.Size(283, 34);
+            this.textBox7.TabIndex = 77;
             // 
             // label6
             // 
@@ -345,10 +364,10 @@
             this.tabPage3.Controls.Add(this.button6);
             this.tabPage3.Controls.Add(this.comboBox1);
             this.tabPage3.Controls.Add(this.pictureBox2);
-            this.tabPage3.Location = new System.Drawing.Point(4, 38);
+            this.tabPage3.Location = new System.Drawing.Point(4, 34);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(401, 508);
+            this.tabPage3.Size = new System.Drawing.Size(401, 512);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "  CCCD  ";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -373,7 +392,7 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(121, 38);
             this.button6.TabIndex = 87;
-            this.button6.Text = "START";
+            this.button6.Text = "CATCH";
             this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -441,25 +460,6 @@
             this.textBox6.Size = new System.Drawing.Size(283, 34);
             this.textBox6.TabIndex = 77;
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Times New Roman", 13.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.label5.Location = new System.Drawing.Point(36, 51);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(98, 26);
-            this.label5.TabIndex = 78;
-            this.label5.Text = "Mã QN :";
-            // 
-            // textBox7
-            // 
-            this.textBox7.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox7.Location = new System.Drawing.Point(157, 48);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.ReadOnly = true;
-            this.textBox7.Size = new System.Drawing.Size(283, 34);
-            this.textBox7.TabIndex = 77;
-            // 
             // Camera
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -469,7 +469,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.label2);
             this.Name = "Camera";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Camera";
             this.Load += new System.EventHandler(this.Camera_Load);
             this.tabControl1.ResumeLayout(false);
