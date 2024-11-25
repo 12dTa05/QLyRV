@@ -98,7 +98,7 @@ namespace QLyRV
                 //string output = process.StandardOutput.ReadToEnd();
                 //string error = process.StandardError.ReadToEnd();
 
-                process.WaitForExit();
+                //process.WaitForExit();
 
                 //// Optionally log output or error
                 //if (!string.IsNullOrEmpty(output))
@@ -121,26 +121,12 @@ namespace QLyRV
 
         public static string ConvertImageToBase64String(Image image)
         {
-            var ratioX = (double)50 / image.Width;
-            var ratioY = (double)50 / image.Height;
-            var ratio = Math.Min(ratioX, ratioY);
-
-            var newWidth = (int)(image.Width * ratio);
-            var newHeight = (int)(image.Height * ratio);
-
-            var resizedImage = new Bitmap(newWidth, newHeight);
-            using (var graphics = Graphics.FromImage(resizedImage))
-            {
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-            }
+           
 
             using (MemoryStream ms = new MemoryStream())
             {
 
-                resizedImage.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
 
                 return Convert.ToBase64String(ms.ToArray());
             }
