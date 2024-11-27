@@ -117,7 +117,7 @@ namespace QLyRV
                 DateTime startDate = selectedDate;             // Start of selected date at 00:00
                 DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
 
-                string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
+                string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  CAST(ds.ThoiGianRa as date) = @StartDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -127,8 +127,8 @@ namespace QLyRV
                     using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                     {
                         // Set the parameters for the date range
-                        adapter.SelectCommand.Parameters.AddWithValue("@StartDate", startDate);
-                        adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
+                        adapter.SelectCommand.Parameters.AddWithValue("@StartDate", dateTimePicker1.Value.ToString());
+                        //adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
                         adapter.SelectCommand.Parameters.AddWithValue("@DonVi", comboBox1.SelectedItem.ToString());
 
                         // Fill the DataSet
@@ -149,7 +149,7 @@ namespace QLyRV
             DateTime startDate = selectedDate;             // Start of selected date at 00:00
             DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
 
-            string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn WHERE qn.MaDV = @DonVi and qn.MaQN = ds.MaQN and ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate";
+            string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn WHERE qn.MaDV = @DonVi and qn.MaQN = ds.MaQN and CAST(ds.ThoiGianRa as date) = @date";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -159,8 +159,8 @@ namespace QLyRV
                 using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                 {
                     // Set the parameters for the date range
-                    adapter.SelectCommand.Parameters.AddWithValue("@StartDate", startDate);
-                    adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
+                    adapter.SelectCommand.Parameters.AddWithValue("@date", dateTimePicker1.Value.ToString());
+                    //adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
                     adapter.SelectCommand.Parameters.AddWithValue("@DonVi", comboBox1.SelectedItem.ToString());
 
                     // Fill the DataSet
@@ -205,7 +205,7 @@ namespace QLyRV
                     DateTime startDate = selectedDate;             // Start of selected date at 00:00
                     DateTime endDate = selectedDate.AddDays(2);    // Start of the next day at 00:00
 
-                    string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  ds.ThoiGianRa > @StartDate AND ds.ThoiGianRa < @EndDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
+                    string query = " SELECT ds.MaQN, qn.HoTen, qn.MaDV, ds.HinhThucRV, ds.LyDo, ds.DiaDiem, ds.ThoiGianRa, ds.ThoiGianVao FROM DANHSACH ds, QUANNHAN qn, DONVI dv WHERE  CAST(ds.ThoiGianRa as date) = @StartDate and ds.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @DonVi";
 
                     string connectionString = conn_string;
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -215,8 +215,8 @@ namespace QLyRV
                         using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
                         {
                             // Set the parameters for the date range
-                            adapter.SelectCommand.Parameters.AddWithValue("@StartDate", startDate);
-                            adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
+                            adapter.SelectCommand.Parameters.AddWithValue("@StartDate",dateTimePicker1.Value.ToString());
+                            //adapter.SelectCommand.Parameters.AddWithValue("@EndDate", endDate);
                             adapter.SelectCommand.Parameters.AddWithValue("@DonVi", comboBox1.SelectedItem.ToString());
 
                             // Fill the DataSet

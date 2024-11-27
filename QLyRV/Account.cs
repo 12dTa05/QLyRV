@@ -18,7 +18,7 @@ namespace QLyRV
         List<Image> images = new List<Image>();
         string[] location = new string[25];
 
-        public static String account, password;
+        public static string account, password;
         public Account()
         {
             InitializeComponent();

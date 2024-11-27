@@ -31,8 +31,8 @@ namespace QLyRV
             string connectionString = conn_string;
             if (Success.Type == 0)
             {
-                
-                
+
+
                 using (SqlConnection conn = new SqlConnection(connectionString))
                 {
                     conn.Open();
@@ -71,7 +71,7 @@ namespace QLyRV
             }
             else
             {
-                comboBox1.Items.Add(Account.account);
+                comboBox1.Hide();
             }
 
             var items = comboBox1.Items.Cast<string>().ToList();
@@ -109,8 +109,8 @@ namespace QLyRV
 
             if(checkBox1.Checked)
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN";
-                string query1 = "select qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN";
+                string query1 = "select distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -138,8 +138,8 @@ namespace QLyRV
             }
             else
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQn = ds.MaQN and ds.STT = nk.STT_DS";
-                string query1 = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQn = nk.MaQN ";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQn = ds.MaQN and ds.STT = nk.STT_DS";
+                string query1 = " SELECT distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQn = nk.MaQN ";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -196,8 +196,8 @@ namespace QLyRV
 
             if (checkBox1.Checked)
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv ";
-                string query1 = "select qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv ";
+                string query1 = "select distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -227,8 +227,8 @@ namespace QLyRV
             }
             else
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
-                string query1 = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                string query1 = " SELECT distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -283,8 +283,8 @@ namespace QLyRV
 
             if (checkBox1.Checked)
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = @dv";
-                string query1 = "select qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = @dv";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = @dv";
+                string query1 = "select distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = @dv";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -314,8 +314,8 @@ namespace QLyRV
             }
             else
             {
-                string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = @dv";
-                string query1 = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = @dv";
+                string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = @dv";
+                string query1 = " SELECT distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = @dv";
 
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -392,8 +392,8 @@ namespace QLyRV
 
                 if (checkBox1.Checked)
                 {
-                    string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv ";
-                    string query1 = "select qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                    string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv ";
+                    string query1 = "select distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
 
                     string connectionString = conn_string;
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -423,8 +423,8 @@ namespace QLyRV
                 }
                 else
                 {
-                    string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
-                    string query1 = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                    string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+                    string query1 = " SELECT distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
 
                     string connectionString = conn_string;
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -478,8 +478,8 @@ namespace QLyRV
 
                 if (checkBox1.Checked)
                 {
-                    string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = @dv";
-                    string query1 = "select qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = @dv";
+                    string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao,nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and ds.STT = nk.STT_DS and  qn.MaQN = ds.MaQN and qn.MaDV = @dv";
+                    string query1 = "select distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao = @tg1 and nk.MaQN = qn.MaQN and qn.MaDV = @dv";
 
                     string connectionString = conn_string;
                     using (SqlConnection conn = new SqlConnection(connectionString))
@@ -509,8 +509,8 @@ namespace QLyRV
                 }
                 else
                 {
-                    string query = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = @dv";
-                    string query1 = " SELECT qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = @dv";
+                    string query = " SELECT distinct(nk.STT), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao, nk.MaVP from NHATKYQN nk, DANHSACH ds, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = ds.MaQN and ds.STT = nk.STT_DS and qn.MaDV = @dv";
+                    string query1 = " SELECT distinct(nk.MaGhiNhan), qn.MaQN, qn.HoTen, qn.MaDV, nk.ThoiGianRa, nk.ThoiGianVao from NHATKYTN nk, QUANNHAN qn, DONVI dv where nk.ThoiGianVao >= @tg1 and nk.ThoiGianVao <= @tg2 and qn.MaQN = nk.MaQN and qn.MaDV = @dv";
 
                     string connectionString = conn_string;
                     using (SqlConnection conn = new SqlConnection(connectionString))

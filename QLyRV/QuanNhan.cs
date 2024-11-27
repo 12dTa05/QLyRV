@@ -44,6 +44,7 @@ namespace QLyRV
 
             if (Success.Type == 0)
             {
+                dataGridView1.DataSource = GetQN().Tables[0];
                 string chucvuQuery = "SELECT MaDV FROM DONVI where TonTai = 1 and MaDVCapTren = 'admin'";
                 string connectionString = conn_string;
                 using (SqlConnection conn = new SqlConnection(connectionString))
@@ -77,6 +78,7 @@ namespace QLyRV
                     {
                         using (SqlDataReader reader = chucvuCommand.ExecuteReader())
                         {
+                            comboBox1.Items.Add(Account.account);
                             while (reader.Read())
                             {
                                 comboBox1.Items.Add(reader.GetString(0));
@@ -88,7 +90,7 @@ namespace QLyRV
             }
             else
             {
-                comboBox1.Items.Add(Account.account);
+                comboBox1.Hide();
             }
 
             var items = comboBox1.Items.Cast<string>().ToList();
@@ -103,7 +105,7 @@ namespace QLyRV
             }
 
             //comboBox1.SelectedIndex = 0;
-            dataGridView1.DataSource = GetQN().Tables[0];
+            
         }
 
         DataSet GetQN()
@@ -111,8 +113,8 @@ namespace QLyRV
 
             DataSet data = new DataSet();
 
-            string query = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where qn.TonTai = @tt and qn.MaDV = @dv ";
-            string query1 = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where  qn.TonTai = @tt  ";
+            string query = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where qn.TonTai = @tt and qn.MaDV = @dv" + "\n union \n" + "SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn, DONVI dv where qn.TonTai = @tt and qn.MaDV = dv.MaDV and dv.MaDVCapTren = @dv";
+            string query1 = " SELECT qn.CCCD, qn.MaQN, qn.HoTen, qn.CapBac, qn.MaCV, qn.MaDV, qn.TonTai from QUANNHAN qn where  qn.TonTai = @tt   ";
 
             string connectionString = conn_string;
             using (SqlConnection conn = new SqlConnection(connectionString))
